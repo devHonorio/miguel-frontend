@@ -3,7 +3,7 @@ import { League_Spartan } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/providers/react-query";
-
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 const leagueSpartan = League_Spartan({
   subsets: ["latin"],
 });
@@ -23,10 +23,17 @@ export default function RootLayout({ children }: LayoutProps) {
       <body
         className={`${leagueSpartan.className} flex min-h-screen flex-col gap-5`}
       >
-        <QueryProvider>
-          {children}
-          <Toaster position="top-right" richColors closeButton theme="light" />
-        </QueryProvider>
+        <NuqsAdapter>
+          <QueryProvider>
+            {children}
+            <Toaster
+              position="top-right"
+              richColors
+              closeButton
+              theme="light"
+            />
+          </QueryProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
