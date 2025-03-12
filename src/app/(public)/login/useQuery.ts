@@ -1,14 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { LoginType } from "./schema";
 import { toast } from "sonner";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { api } from "../api";
 
 const ONE_DAY_IN_SECONDS = 86400;
 
 const signIn = async (data: LoginType) => {
-  const response = await axios.post<{ access_token: string }>("/login", data);
+  const response = await api.post<{ access_token: string }>("/login", data);
 
   return response.data.access_token;
 };
