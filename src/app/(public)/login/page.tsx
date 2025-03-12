@@ -16,8 +16,6 @@ export default function Login() {
 
   const { mutate, isPending } = useQuery();
 
-  console.log("render");
-
   return (
     <form
       className="flex w-full flex-col gap-5"
