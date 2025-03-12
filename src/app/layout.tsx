@@ -20,9 +20,7 @@ export interface LayoutProps {
 export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="pt-br">
-      <body
-        className={`${leagueSpartan.className} flex min-h-screen flex-col gap-5`}
-      >
+      <body className={`${leagueSpartan.className} flex min-h-screen flex-col`}>
         <NuqsAdapter>
           <QueryProvider>
             {children}
