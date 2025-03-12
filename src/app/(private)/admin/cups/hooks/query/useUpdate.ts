@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useApi } from "@/hooks";
-import { CupUpdateType } from "../../components/form-update/FormUpdate";
 import { queryClient } from "@/providers/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { parseAsBoolean, useQueryState } from "nuqs";
+import { CupUpdateType } from "../../schema";
 
 export const useUpdate = (id: string) => {
   const { api } = useApi();
