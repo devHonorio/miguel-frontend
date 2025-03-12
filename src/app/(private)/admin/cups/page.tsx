@@ -9,26 +9,114 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, PlusCircle } from "lucide-react";
-import Link from "next/link";
-import { useQuery } from "./useQuery";
+import { Edit, EllipsisIcon, Loader2, PlusCircle, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryStates,
+} from "nuqs";
+import { useDelete, useGet } from "./hooks/query";
+import { FormCreate } from "./components/form-create";
+import { FormUpdate } from "./components/form-update";
 
 export default function Cups() {
-  const { data, isPending } = useQuery();
+  const { data, isPending } = useGet();
+  const { mutate } = useDelete();
+
+  const [cupStates, setCupStates] = useQueryStates({
+    modalCreate: parseAsBoolean.withDefault(false),
+    modalUpdate: parseAsBoolean.withDefault(false),
+    modalAlertDelete: parseAsBoolean.withDefault(false),
+
+    idUpdate: parseAsString.withDefault(""),
+    sizeDelete: parseAsInteger.withDefault(0),
+  });
 
   return (
-    <div className="mx-auto flex w-md flex-col gap-5">
-      <Link href="/admin/cups/create">
-        <Button>
-          Adicionar copo <PlusCircle />
-        </Button>
-      </Link>
+    <>
+      <Dialog
+        open={cupStates.modalCreate}
+        onOpenChange={(open) => setCupStates({ modalCreate: open })}
+      >
+        <DialogTrigger asChild>
+          <Button>
+            Adicionar copo <PlusCircle />
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar copo</DialogTitle>
+          </DialogHeader>
+          <FormCreate />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={cupStates.modalUpdate}
+        onOpenChange={(open) =>
+          setCupStates({ modalUpdate: open, idUpdate: "" })
+        }
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar copo </DialogTitle>
+          </DialogHeader>
+
+          <FormUpdate id={cupStates.idUpdate} />
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={cupStates.modalAlertDelete}
+        onOpenChange={(open) => setCupStates({ modalAlertDelete: open })}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tem certeza que deseja apagar?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se você apagar esse copo, ele também será apagado no histórico dos
+              pedidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => mutate(cupStates.sizeDelete)}>
+              Apagar mesmo assim
+            </AlertDialogAction>
+            <AlertDialogCancel>Cacelar</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Table>
         <TableCaption>Copos cadastrados</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Tamanho/ml</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -39,13 +127,44 @@ export default function Cups() {
               </TableCell>
             </TableRow>
           )}
-          {data?.map(({ size }) => (
-            <TableRow key={size}>
+          {data?.map(({ size, id }) => (
+            <TableRow key={id}>
               <TableCell>{size}ml</TableCell>
+              <TableCell className="text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" variant="ghost">
+                      <EllipsisIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        setCupStates({ modalUpdate: true, idUpdate: id })
+                      }
+                    >
+                      Editar <Edit />
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() =>
+                        setCupStates({
+                          sizeDelete: size,
+                          modalAlertDelete: true,
+                        })
+                      }
+                    >
+                      Apagar <Trash2 />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 }
