@@ -8,10 +8,14 @@ interface PathType {
 
 const secret = new TextEncoder().encode(process.env.SECRET);
 
-const verifyIsAdmin = async (token: string) => {
-  const { payload } = await jwtVerify(token, secret);
+export const verifyIsAdmin = async (token: string) => {
+  try {
+    const { payload } = await jwtVerify(token, secret);
 
-  return payload.is_admin as boolean;
+    return payload.is_admin as boolean;
+  } catch {
+    return false;
+  }
 };
 
 const paths: PathType = {
