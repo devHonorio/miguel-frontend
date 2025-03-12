@@ -8,10 +8,7 @@ import { useRouter } from "next/navigation";
 const ONE_DAY_IN_SECONDS = 86400;
 
 const signIn = async (data: LoginType) => {
-  const response = await axios.post<{ access_token: string }>(
-    "http://localhost:3001/login",
-    data,
-  );
+  const response = await axios.post<{ access_token: string }>("/login", data);
 
   return response.data.access_token;
 };
