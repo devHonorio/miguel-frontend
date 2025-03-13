@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -45,7 +44,7 @@ import { FormUpdate } from "./components/form-update";
 
 export default function Cups() {
   const { data, isPending } = useGet();
-  const { mutate } = useDelete();
+  const { mutate, isPending: isPendingDelete } = useDelete();
 
   const [cupStates, setCupStates] = useQueryStates({
     modalCreate: parseAsBoolean.withDefault(false),
@@ -103,9 +102,16 @@ export default function Cups() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => mutate(cupStates.sizeDelete)}>
+            <Button
+              onClick={() => {
+                mutate(cupStates.sizeDelete);
+                setCupStates({ modalAlertDelete: true });
+              }}
+              disabled={isPending}
+            >
               Apagar mesmo assim
-            </AlertDialogAction>
+              {isPendingDelete && <Loader2 className="animate-spin" />}
+            </Button>
             <AlertDialogCancel>Cacelar</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>

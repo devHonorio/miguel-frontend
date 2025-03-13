@@ -5,9 +5,15 @@ import { AxiosError } from "axios";
 import { queryClient } from "@/providers/react-query";
 import { useApi } from "@/hooks";
 import { revalidateCatalog } from "@/app/actions";
+import { parseAsBoolean, parseAsInteger, useQueryStates } from "nuqs";
 
 export const useDelete = () => {
   const { api } = useApi();
+
+  const [, setCupStates] = useQueryStates({
+    modalAlertDelete: parseAsBoolean.withDefault(false),
+    sizeDelete: parseAsInteger.withDefault(0),
+  });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (size: number) => {
@@ -24,6 +30,7 @@ export const useDelete = () => {
         cups.filter((cup) => cup.size !== size),
       );
       revalidateCatalog();
+      setCupStates({ sizeDelete: 0, modalAlertDelete: false });
     },
 
     onError: (err: AxiosError) => {
