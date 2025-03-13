@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { queryClient } from "@/providers/react-query";
 import { useApi } from "@/hooks";
+import { revalidateCatalog } from "@/app/actions";
 
 export const useDelete = () => {
   const { api } = useApi();
@@ -22,6 +23,7 @@ export const useDelete = () => {
         ["cups"],
         cups.filter((cup) => cup.size !== size),
       );
+      revalidateCatalog();
     },
 
     onError: (err: AxiosError) => {
