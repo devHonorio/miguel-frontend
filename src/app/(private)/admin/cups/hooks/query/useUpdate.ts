@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { CupUpdateType } from "../../schema";
+import { revalidateCatalog } from "@/app/actions";
 
 export const useUpdate = (id: string) => {
   const { api } = useApi();
@@ -39,6 +40,7 @@ export const useUpdate = (id: string) => {
 
       console.log(cups);
       setModalUpdate(false);
+      revalidateCatalog();
     },
 
     onError: (err) => {

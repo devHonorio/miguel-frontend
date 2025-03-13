@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useApi } from "@/hooks";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { queryClient } from "@/providers/react-query";
+import { revalidateCatalog } from "@/app/actions";
 
 export const useCreate = () => {
   const { api } = useApi();
@@ -29,6 +30,7 @@ export const useCreate = () => {
 
       queryClient.setQueryData(["cups"], cups);
       setModalCreate(false);
+      revalidateCatalog();
     },
 
     onError: (err: Error) => {
