@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCreate } from "../../hooks/query";
 import { useFormCreate } from "../../hooks/form";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { SwitchWithDescription } from "@/components/switch-with-description";
 
@@ -53,7 +52,10 @@ export const FormCreate = () => {
         error={errorDescription}
       />
 
-      <SwitchWithDescription error={errorPrice} />
+      <SwitchWithDescription
+        error={errorInStock}
+        onCheckedChange={setInStock}
+      />
 
       <Button type="submit" isLoading={isPending}>
         Salvar
