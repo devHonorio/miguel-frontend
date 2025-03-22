@@ -1,6 +1,7 @@
 import { Switch } from "../ui/switch";
+import { Root } from "@radix-ui/react-switch";
 
-interface SwitchWithDescriptionProps {
+interface SwitchWithDescriptionProps extends React.ComponentProps<typeof Root> {
   error?: string;
 }
 
