@@ -25,20 +25,22 @@ export const useUpdate = (id: string) => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async ({ id, size }: CupUpdateType) => {
-      await api.patch(`/cups/${id}`, { size });
+    mutationFn: async ({ id, ...data }: CupUpdateType) => {
+      const response = await api.patch(`/cups/${id}`, data);
+      return response.data as CupUpdateType;
     },
 
-    onSuccess: (_, { id, size }) => {
-      const cups = queryClient.getQueryData(["cups"]) as CupUpdateType[];
+    onSuccess: (data) => {
+      let cups = queryClient.getQueryData(["cups"]) as CupUpdateType[];
 
-      const cupIndex = cups.findIndex((cup) => cup.id === id);
+      cups = cups.filter((cup) => cup.id !== data.id);
 
-      cups[cupIndex].size = size;
+      cups.push(data);
+
+      cups.sort((a, b) => a.size - b.size);
 
       queryClient.setQueryData(["cups"], cups);
 
-      console.log(cups);
       setModalUpdate(false);
       revalidateCatalog();
     },
