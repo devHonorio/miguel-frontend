@@ -1,14 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createCupSchema } from "../../schema";
-import { removeString, toBRL } from "@/app/utils";
+import { cleanAndFormatBRL, cleanFormatBRLAndParseReal } from "@/app/utils";
 
 export const useFormCreate = () => {
   const {
     register,
     handleSubmit,
     formState: {
-      errors: { size, price, description, in_stock, priceTemplate },
+      errors: { size, price, description, in_stock },
     },
     setValue,
     getValues,
@@ -28,26 +28,16 @@ export const useFormCreate = () => {
   };
 
   const setPriceTemplate = (value: string) => {
-    const price = removeString(value);
+    const priceFormatted = cleanAndFormatBRL(value);
 
-    if (!price) return "R$ 00,00";
-
-    const priceInCents = +price / 100;
-
-    const priceFormated = toBRL(priceInCents);
-
-    setValue("priceTemplate", `${priceFormated}`);
+    setValue("priceTemplate", priceFormatted);
   };
 
   const setPrice = (value: string) => {
-    const price = removeString(value);
-
-    const priceInReal = +price / 100;
+    const priceInReal = cleanFormatBRLAndParseReal(value);
 
     setValue("price", priceInReal);
   };
-
-  if (priceTemplate?.message) console.log("erro: ", priceTemplate?.message);
 
   return {
     register,
