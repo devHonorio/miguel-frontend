@@ -7,6 +7,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { toBRL } from "@/app/utils";
 
 export default async function Catalog() {
   const response = await api.get<CupUpdateType[]>("/cups");
@@ -14,11 +15,11 @@ export default async function Catalog() {
   const cups = response.data;
   return (
     <>
-      {cups?.map(({ id, size }) => {
+      {cups?.map(({ id, size, description, price }) => {
         return (
           <div
             key={id}
-            className="group max-w-sm space-y-5 rounded-[4rem] bg-white p-10"
+            className="group w-full max-w-sm space-y-5 rounded-[4rem] bg-white p-10"
           >
             <Image
               src="/acai.png"
@@ -35,27 +36,14 @@ export default async function Catalog() {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <div className="line-clamp-3 text-lg font-medium text-black/60">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Atque fuga facere vel pariatur est consectetur autem
-                  exercitationem ut iste sapiente? Non quod hic voluptatum, nemo
-                  voluptatibus mollitia sit nisi culpa.
+                  {description}
                 </div>
               </HoverCardTrigger>
 
-              <HoverCardContent>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque
-                fuga facere vel pariatur est consectetur autem exercitationem ut
-                iste sapiente? Non quod hic voluptatum, nemo voluptatibus
-                mollitia sit nisi culpa.
-              </HoverCardContent>
+              <HoverCardContent>{description}</HoverCardContent>
             </HoverCard>
 
-            <div className="text-3xl font-black">
-              {Intl.NumberFormat("pt-br", {
-                style: "currency",
-                currency: "BRL",
-              }).format(20)}
-            </div>
+            <div className="text-3xl font-black">{toBRL(price)}</div>
             <Button size="lg" className="rounded-full text-lg font-bold">
               Pedir
             </Button>

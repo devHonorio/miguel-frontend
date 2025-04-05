@@ -22,11 +22,17 @@ export const useCreate = () => {
       return response.data;
     },
 
-    onSuccess: (data: CupUpdateType, { size }) => {
+    onSuccess: ({
+      id,
+      in_stock,
+      price,
+      size,
+      description,
+    }: Omit<CupUpdateType, "priceTemplate">) => {
       setModalCreate(false);
       const cups = queryClient.getQueryData(["cups"]) as CupUpdateType[];
 
-      cups.push({ size, id: data.id });
+      cups.push({ size, id, in_stock, price, description });
 
       queryClient.setQueryData(["cups"], cups);
       setModalCreate(false);

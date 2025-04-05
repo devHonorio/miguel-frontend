@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "./label";
 
-interface InputProps {
+export interface InputProps {
   label?: string;
   error?: string;
 }
