@@ -2,8 +2,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useUpdate } from "../../hooks/query/useUpdate";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormUpdate } from "../../hooks/form";
+import { Textarea } from "@/components/ui/textarea";
+import { SwitchWithDescription } from "@/components/switch-with-description";
+import { toBRL } from "@/app/utils";
 
 interface FormUpdateProps {
   id: string;
@@ -12,10 +15,24 @@ interface FormUpdateProps {
 export const FormUpdate = ({ id }: FormUpdateProps) => {
   const { isLoading, data, mutate, isPending } = useUpdate(id);
 
-  const { errorSize, handleSubmit, register, reset } = useFormUpdate();
+  const {
+    errorSize,
+    handleSubmit,
+    register,
+    reset,
+    errorDescription,
+    errorInStock,
+    errorPrice,
+    setInStock,
+    setPrice,
+    setPriceTemplate,
+  } = useFormUpdate();
+
+  const [stock, setStock] = useState(true);
 
   useEffect(() => {
-    reset(data);
+    setStock(!!data?.in_stock);
+    reset({ ...data, priceTemplate: toBRL(data?.price ?? 0) });
   }, [data, reset]);
 
   if (isLoading) return <Loader2 className="animate-spin" />;
@@ -23,6 +40,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
   return (
     <form
       onSubmit={handleSubmit((data) => {
+        console.log(data);
         mutate(data);
       })}
       className="space-y-2"
@@ -35,6 +53,33 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
         type="number"
         min={0}
         error={errorSize}
+      />
+
+      <Input
+        {...register("priceTemplate")}
+        label="Preço/R$"
+        error={errorPrice}
+        onChange={(e) => {
+          setPriceTemplate(e.target.value);
+          setPrice(e.target.value);
+        }}
+        onClick={(e) => e.currentTarget.select()}
+        placeholder="R$ 00,00"
+      />
+
+      <Textarea
+        placeholder="Descreva as regras desse copo"
+        {...register("description")}
+        error={errorDescription}
+      />
+
+      <SwitchWithDescription
+        error={errorInStock}
+        onCheckedChange={(value) => {
+          setInStock(value);
+          setStock(value);
+        }}
+        checked={stock}
       />
 
       <Button type="submit" isLoading={isPending}>
