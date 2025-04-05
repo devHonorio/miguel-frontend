@@ -20,7 +20,7 @@ export const SwitchWithDescription = ({
           Se não estiver ativo o copo não ira aparecer nas pagina inicial
         </div>
       </div>
-      <Switch {...props} defaultChecked />
+      <Switch {...props} />
 
       {error && (
         <p data-error={!!error} className="data-[error=true]:text-red-600">
