@@ -10,7 +10,7 @@ export const loginSchema = z.object({
     .refine((phone) => User.phoneValidator(phone), {
       message: "Telefone deve conter 11 dígitos contendo DDD e o digito 9.",
     }),
-  password: z.string().min(6, "Senha deve conter ao menos 6 digitos"),
+  password: z.string().min(6, "Senha deve conter ao menos 6 dígitos"),
 });
 
 export type LoginType = z.infer<typeof loginSchema>;

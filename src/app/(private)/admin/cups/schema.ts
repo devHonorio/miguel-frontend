@@ -3,7 +3,7 @@ import z from "zod";
 export const createCupSchema = z.object({
   size: z.coerce
     .number()
-    .min(1, "Tamanho minimo é 1.")
+    .min(1, "Tamanho mínimo é 1.")
     .int("Numero deve ser um inteiro."),
   price: z.coerce
     .number({ errorMap: () => ({ message: "Preço é obrigatório." }) })

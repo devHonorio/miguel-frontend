@@ -47,6 +47,7 @@ export const FormCreate = () => {
       />
 
       <Textarea
+        label="Descrição"
         placeholder="Descreva as regras desse copo"
         {...register("description")}
         error={errorDescription}

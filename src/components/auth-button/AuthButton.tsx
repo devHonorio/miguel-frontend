@@ -29,7 +29,7 @@ export const AuthButton = () => {
             deleteCookie("token");
           }}
         >
-          Deslogar
+          Sair
         </Button>
       )}
 

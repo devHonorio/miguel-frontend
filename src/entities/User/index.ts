@@ -14,11 +14,11 @@ function removePhoneStr(phone: string) {
 }
 
 function phoneMask(phone: string) {
-  const numeros = removePhoneStr(phone);
+  const numbers = removePhoneStr(phone);
 
   const regex = /^(\d{2})(\d{1})(\d{4})(\d{4})$/;
 
-  const resultado = numeros.replace(regex, "($1) $2 $3-$4");
+  const resultado = numbers.replace(regex, "($1) $2 $3-$4");
 
   return resultado;
 }
