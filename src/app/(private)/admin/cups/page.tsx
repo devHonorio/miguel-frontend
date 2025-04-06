@@ -113,7 +113,7 @@ export default function Cups() {
               Apagar mesmo assim
               {isPendingDelete && <Loader2 className="animate-spin" />}
             </Button>
-            <AlertDialogCancel>Cacelar</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

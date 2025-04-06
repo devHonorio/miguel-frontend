@@ -68,6 +68,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
       />
 
       <Textarea
+        label="Descrição"
         placeholder="Descreva as regras desse copo"
         {...register("description")}
         error={errorDescription}

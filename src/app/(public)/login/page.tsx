@@ -25,7 +25,7 @@ export default function Login() {
     >
       <Input
         {...register("phone")}
-        label="Telefone/Whatsapp"
+        label="Telefone/WhatsApp"
         placeholder="(46) 9 9999-9999"
         error={phone?.message}
         onChange={(e) => setValue("phone", User.phoneMask(e.target.value))}

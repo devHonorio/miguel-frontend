@@ -13,7 +13,7 @@ export default function PublicLayout({ children }: LayoutProps) {
   return (
     <>
       <header className="flex items-center justify-between gap-5 px-10 py-2">
-        <Image src={logo} alt="Logo Migel Açaí" width={50} />
+        <Image src={logo} alt="Logo Miguel Açaí" width={50} priority />
 
         <Navigation paths={paths} />
       </header>

@@ -23,7 +23,7 @@ export default async function Catalog() {
           >
             <Image
               src="/acai.png"
-              alt="Copo de açai"
+              alt="Copo de açaí"
               width={200}
               height={200}
               priority
