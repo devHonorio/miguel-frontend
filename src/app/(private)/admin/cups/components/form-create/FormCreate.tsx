@@ -14,6 +14,7 @@ export const FormCreate = () => {
     errorPrice,
     errorDescription,
     errorInStock,
+    errorAdditional,
     setInStock,
     setPriceTemplate,
     setPrice,
@@ -44,6 +45,14 @@ export const FormCreate = () => {
         }}
         onClick={(e) => e.currentTarget.select()}
         placeholder="R$ 00,00"
+      />
+
+      <Input
+        {...register("quantity_additional")}
+        label="Quantidade de adicionais"
+        type="number"
+        min={0}
+        error={errorAdditional}
       />
 
       <Textarea

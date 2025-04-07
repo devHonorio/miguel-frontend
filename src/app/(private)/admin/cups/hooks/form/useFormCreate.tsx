@@ -8,7 +8,7 @@ export const useFormCreate = () => {
     register,
     handleSubmit,
     formState: {
-      errors: { size, price, description, in_stock },
+      errors: { size, price, description, in_stock, quantity_additional },
     },
     setValue,
     getValues,
@@ -46,6 +46,7 @@ export const useFormCreate = () => {
     errorPrice: price?.message,
     errorDescription: description?.message,
     errorInStock: in_stock?.message,
+    errorAdditional: quantity_additional?.message,
     setInStock,
     setPriceTemplate,
     getValues,

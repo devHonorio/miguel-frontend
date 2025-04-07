@@ -9,7 +9,7 @@ export const useFormUpdate = () => {
     register,
     handleSubmit,
     formState: {
-      errors: { size, description, in_stock, price },
+      errors: { size, description, in_stock, price, quantity_additional },
     },
     setValue,
     getValues,
@@ -41,6 +41,7 @@ export const useFormUpdate = () => {
     errorPrice: price?.message,
     errorDescription: description?.message,
     errorInStock: in_stock?.message,
+    errorQuantityAdditional: quantity_additional?.message,
     setInStock,
     setPriceTemplate,
     setPrice,
