@@ -75,6 +75,7 @@ export default function Additional() {
           <TableRow>
             <TableHead>Nome</TableHead>
             <TableHead>Preço/R$</TableHead>
+            <TableHead>Em estoque</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -88,10 +89,11 @@ export default function Additional() {
           )}
 
           {!isLoading &&
-            data?.map(({ id, name, price }) => (
+            data?.map(({ id, name, price, in_stock }) => (
               <TableRow key={id}>
                 <TableCell>{name}</TableCell>
                 <TableCell>{toBRL(price)}</TableCell>
+                <TableCell>{in_stock ? "sim" : "não"}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

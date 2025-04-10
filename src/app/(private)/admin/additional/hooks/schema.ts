@@ -12,7 +12,7 @@ export const additionalSchema = z.object({
     })
     .min(0, "Preço deve ser um numero positivo."),
   priceTemplate: z.string().optional(),
-  in_stock: z.boolean().optional(),
+  in_stock: z.boolean().optional().default(true),
 });
 
 export type AdditionalType = z.infer<typeof additionalSchema>;

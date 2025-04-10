@@ -25,11 +25,16 @@ export const useFormCreate = () => {
     setValue("price", priceInReal);
   };
 
+  const setInStock = (checked: boolean) => {
+    setValue("in_stock", checked);
+  };
+
   return {
     errorName: name?.message,
     errorPrice: price?.message,
     setPrice,
     setPriceTemplate,
+    setInStock,
     handleSubmit,
     register,
   };
