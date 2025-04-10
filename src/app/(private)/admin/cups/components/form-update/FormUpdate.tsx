@@ -91,6 +91,8 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
           setStock(value);
         }}
         checked={stock}
+        title="Em estoque"
+        description="Se não estiver ativo o copo não ira aparecer nas pagina inicial"
       />
 
       <Button type="submit" isLoading={isPending}>
