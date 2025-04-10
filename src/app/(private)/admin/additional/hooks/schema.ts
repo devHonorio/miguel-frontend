@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const additionalSchema = z.object({
+  id: z.string().optional(),
   name: z
     .string()
     .min(3, "Nome deve conter pelo menos 3 letras.")
@@ -11,6 +12,7 @@ export const additionalSchema = z.object({
     })
     .min(0, "Preço deve ser um numero positivo."),
   priceTemplate: z.string().optional(),
+  in_stock: z.boolean().optional(),
 });
 
 export type AdditionalType = z.infer<typeof additionalSchema>;
