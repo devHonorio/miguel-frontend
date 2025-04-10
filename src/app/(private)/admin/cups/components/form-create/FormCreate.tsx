@@ -63,6 +63,8 @@ export const FormCreate = () => {
       />
 
       <SwitchWithDescription
+        title="Em estoque"
+        description=" Se não estiver ativo o copo não ira aparecer nas pagina inicial"
         error={errorInStock}
         onCheckedChange={setInStock}
       />

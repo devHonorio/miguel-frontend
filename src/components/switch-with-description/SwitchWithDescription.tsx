@@ -3,10 +3,14 @@ import { Root } from "@radix-ui/react-switch";
 
 interface SwitchWithDescriptionProps extends React.ComponentProps<typeof Root> {
   error?: string;
+  title: string;
+  description?: string;
 }
 
 export const SwitchWithDescription = ({
   error,
+  title,
+  description,
   ...props
 }: SwitchWithDescriptionProps) => {
   return (
@@ -15,10 +19,8 @@ export const SwitchWithDescription = ({
       className="flex rounded-md border p-3 shadow data-[error=true]:border-red-600"
     >
       <div className="flex-1">
-        <div className="font-bold">Em estoque</div>
-        <div className="text-black/60">
-          Se não estiver ativo o copo não ira aparecer nas pagina inicial
-        </div>
+        <div className="font-bold">{title}</div>
+        <div className="text-black/60">{description}</div>
       </div>
       <Switch {...props} />
 
