@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Ellipsis, Loader2, PlusCircle, Trash2 } from "lucide-react";
+import { Edit, Ellipsis, Loader2, PlusCircle, Trash2 } from "lucide-react";
 import { FormCreate } from "./components/form-create";
 import { parseAsBoolean, parseAsString, useQueryStates } from "nuqs";
 import {
@@ -37,6 +37,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useDelete } from "./hooks/query/useDelete";
+import { FormUpdate } from "./components/form-update";
 
 export default function Additional() {
   const [additionalStates, setAdditionalStates] = useQueryStates({
@@ -44,6 +45,9 @@ export default function Additional() {
 
     modalAlertDelete: parseAsBoolean.withDefault(false),
     ideDelete: parseAsString.withDefault(""),
+
+    modalUpdate: parseAsBoolean.withDefault(false),
+    idUpdate: parseAsString.withDefault(""),
   });
   const { data, isLoading } = useList();
 
@@ -104,6 +108,17 @@ export default function Additional() {
 
                     <DropdownMenuContent>
                       <DropdownMenuItem
+                        onClick={() =>
+                          setAdditionalStates({
+                            idUpdate: id,
+                            modalUpdate: true,
+                          })
+                        }
+                      >
+                        Editar <Edit />
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
                         variant="destructive"
                         onClick={() =>
                           setAdditionalStates({
@@ -149,6 +164,19 @@ export default function Additional() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog
+        open={additionalStates.modalUpdate}
+        onOpenChange={(open) => setAdditionalStates({ modalUpdate: open })}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar adicional</DialogTitle>
+          </DialogHeader>
+
+          <FormUpdate id={additionalStates.idUpdate} />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
