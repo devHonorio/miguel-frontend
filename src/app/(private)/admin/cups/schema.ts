@@ -14,6 +14,9 @@ export const createCupSchema = z.object({
     .string()
     .min(3, "Descrição deve ter mais de 3 caracteres")
     .max(200, "Descrição deve ter menos de 200 caracteres"),
+  quantity_additional: z.coerce
+    .number({ errorMap: () => ({ message: "Quantidade mínima é 0." }) })
+    .min(0),
 });
 
 export const updateSchema = createCupSchema.extend({ id: z.string() });

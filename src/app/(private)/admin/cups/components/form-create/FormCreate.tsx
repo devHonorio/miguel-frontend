@@ -14,6 +14,7 @@ export const FormCreate = () => {
     errorPrice,
     errorDescription,
     errorInStock,
+    errorAdditional,
     setInStock,
     setPriceTemplate,
     setPrice,
@@ -46,6 +47,14 @@ export const FormCreate = () => {
         placeholder="R$ 00,00"
       />
 
+      <Input
+        {...register("quantity_additional")}
+        label="Quantidade de adicionais"
+        type="number"
+        min={0}
+        error={errorAdditional}
+      />
+
       <Textarea
         label="Descrição"
         placeholder="Descreva as regras desse copo"
@@ -54,6 +63,8 @@ export const FormCreate = () => {
       />
 
       <SwitchWithDescription
+        title="Em estoque"
+        description=" Se não estiver ativo o copo não ira aparecer nas pagina inicial"
         error={errorInStock}
         onCheckedChange={setInStock}
       />

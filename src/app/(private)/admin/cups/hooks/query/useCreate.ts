@@ -28,11 +28,19 @@ export const useCreate = () => {
       price,
       size,
       description,
+      quantity_additional,
     }: Omit<CupUpdateType, "priceTemplate">) => {
       setModalCreate(false);
       const cups = queryClient.getQueryData(["cups"]) as CupUpdateType[];
 
-      cups.push({ size, id, in_stock, price, description });
+      cups.push({
+        size,
+        id,
+        in_stock,
+        price,
+        description,
+        quantity_additional,
+      });
 
       queryClient.setQueryData(["cups"], cups);
       setModalCreate(false);

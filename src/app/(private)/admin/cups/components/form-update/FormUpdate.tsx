@@ -23,6 +23,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
     errorDescription,
     errorInStock,
     errorPrice,
+    errorQuantityAdditional,
     setInStock,
     setPrice,
     setPriceTemplate,
@@ -33,6 +34,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
   useEffect(() => {
     setStock(!!data?.in_stock);
     reset({ ...data, priceTemplate: toBRL(data?.price ?? 0) });
+    console.log(data);
   }, [data, reset]);
 
   if (isLoading) return <Loader2 className="animate-spin" />;
@@ -67,6 +69,14 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
         placeholder="R$ 00,00"
       />
 
+      <Input
+        {...register("quantity_additional")}
+        label="Quantidade de adicionais"
+        type="number"
+        min={0}
+        error={errorQuantityAdditional}
+      />
+
       <Textarea
         label="Descrição"
         placeholder="Descreva as regras desse copo"
@@ -81,6 +91,8 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
           setStock(value);
         }}
         checked={stock}
+        title="Em estoque"
+        description="Se não estiver ativo o copo não ira aparecer nas pagina inicial"
       />
 
       <Button type="submit" isLoading={isPending}>
