@@ -15,7 +15,10 @@ export default async function PublicLayout({ children }: LayoutProps) {
         <Navigation paths={paths} />
       </header>
 
-      <main className="flex flex-1">{children}</main>
+      <main className="flex flex-1">
+        <div></div>
+        {children}
+      </main>
     </>
   );
 }
