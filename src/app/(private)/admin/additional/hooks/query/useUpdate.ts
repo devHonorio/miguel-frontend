@@ -16,8 +16,11 @@ export const useUpdate = (id: string) => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: Omit<AdditionalType, "priceTemplate">) => {
-      const response = await api.patch("/additional", data);
+    mutationFn: async ({
+      id,
+      ...data
+    }: Omit<AdditionalType, "priceTemplate">) => {
+      const response = await api.patch(`/additional/${id}`, data);
 
       return response.data;
     },
@@ -34,7 +37,7 @@ export const useUpdate = (id: string) => {
 
     onSuccess: (data: Additional) => {
       setAdditionalStates({ modalUpdate: false });
-      toast.success("Adicional criado!");
+      toast.success("Adicional editado!");
       let additional =
         (queryClient.getQueryData(["additional"]) as Additional[]) ?? [];
 

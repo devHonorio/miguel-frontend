@@ -28,6 +28,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -42,6 +43,7 @@ import { useDelete, useGet } from "./hooks/query";
 import { FormCreate } from "./components/form-create";
 import { FormUpdate } from "./components/form-update";
 import { toBRL } from "@/app/utils";
+import Link from "next/link";
 
 export default function Cups() {
   const { data, isPending } = useGet();
@@ -70,6 +72,7 @@ export default function Cups() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Criar copo</DialogTitle>
+            <DialogDescription>Formulário para criar um copo</DialogDescription>
           </DialogHeader>
           <FormCreate />
         </DialogContent>
@@ -84,6 +87,7 @@ export default function Cups() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar copo </DialogTitle>
+            <DialogDescription>Formulário para editar copo</DialogDescription>
           </DialogHeader>
 
           <FormUpdate id={cupStates.idUpdate} />
@@ -92,7 +96,9 @@ export default function Cups() {
 
       <AlertDialog
         open={cupStates.modalAlertDelete}
-        onOpenChange={(open) => setCupStates({ modalAlertDelete: open })}
+        onOpenChange={(open) =>
+          setCupStates({ modalAlertDelete: open, sizeDelete: 0 })
+        }
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -150,13 +156,11 @@ export default function Cups() {
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        setCupStates({ modalUpdate: true, idUpdate: id })
-                      }
-                    >
-                      Editar <Edit />
-                    </DropdownMenuItem>
+                    <Link href={`/admin/cups?modalUpdate=true&idUpdate=${id}`}>
+                      <DropdownMenuItem>
+                        Editar <Edit />
+                      </DropdownMenuItem>
+                    </Link>
 
                     <DropdownMenuItem
                       variant="destructive"

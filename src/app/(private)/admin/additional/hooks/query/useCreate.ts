@@ -16,7 +16,6 @@ export const useCreate = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: Omit<AdditionalType, "priceTemplate">) => {
-      console.info(data);
       const response = await api.post("/additional", data);
 
       return response.data;
