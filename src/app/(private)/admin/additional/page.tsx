@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -38,6 +39,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useDelete } from "./hooks/query/useDelete";
 import { FormUpdate } from "./components/form-update";
+import Link from "next/link";
 
 export default function Additional() {
   const [additionalStates, setAdditionalStates] = useQueryStates({
@@ -68,6 +70,9 @@ export default function Additional() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Adicionar adicional</DialogTitle>
+            <DialogDescription>
+              Formulário para adicionar um novo adicional
+            </DialogDescription>
           </DialogHeader>
 
           <FormCreate />
@@ -107,16 +112,13 @@ export default function Additional() {
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          setAdditionalStates({
-                            idUpdate: id,
-                            modalUpdate: true,
-                          })
-                        }
+                      <Link
+                        href={`/admin/additional?idUpdate=${id}&modalUpdate=true`}
                       >
-                        Editar <Edit />
-                      </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          Editar <Edit />
+                        </DropdownMenuItem>
+                      </Link>
 
                       <DropdownMenuItem
                         variant="destructive"
@@ -167,11 +169,16 @@ export default function Additional() {
 
       <Dialog
         open={additionalStates.modalUpdate}
-        onOpenChange={(open) => setAdditionalStates({ modalUpdate: open })}
+        onOpenChange={(open) =>
+          setAdditionalStates({ modalUpdate: open, idUpdate: "" })
+        }
       >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar adicional</DialogTitle>
+            <DialogDescription>
+              Formulário para editar um adicional
+            </DialogDescription>
           </DialogHeader>
 
           <FormUpdate id={additionalStates.idUpdate} />

@@ -11,8 +11,8 @@ export const useDelete = () => {
   const { api } = useApi();
 
   const [, setCupStates] = useQueryStates({
-    modalAlertDelete: parseAsBoolean.withDefault(false),
-    sizeDelete: parseAsInteger.withDefault(0),
+    modalAlertDelete: parseAsBoolean,
+    sizeDelete: parseAsInteger,
   });
 
   const { mutate, isPending } = useMutation({

@@ -34,7 +34,6 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
   useEffect(() => {
     setStock(!!data?.in_stock);
     reset({ ...data, priceTemplate: toBRL(data?.price ?? 0) });
-    console.log(data);
   }, [data, reset]);
 
   if (isLoading) return <Loader2 className="animate-spin" />;
@@ -42,7 +41,6 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
         mutate(data);
       })}
       className="space-y-2"
