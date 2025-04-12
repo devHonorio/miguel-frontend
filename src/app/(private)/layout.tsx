@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Cherry, CupSoda, Menu } from "lucide-react";
+import { Cherry, ClipboardList, CupSoda, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   Sheet,
@@ -19,6 +19,7 @@ import { AuthButton } from "@/components/auth-button";
 const paths = [
   { path: "/admin/cups", name: "Copos", icon: <CupSoda /> },
   { path: "/admin/additional", name: "Adicionais", icon: <Cherry /> },
+  { path: "/catalogo", name: "Catálogo", icon: <ClipboardList /> },
 ];
 
 export default function PublicLayout({ children }: LayoutProps) {
