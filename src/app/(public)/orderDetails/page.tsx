@@ -22,7 +22,6 @@ export default function OrderDetails() {
 
   useEffect(() => {
     const tokenCookie = getCookie("token");
-    console.log({ tokenCookie });
     setToken(!!tokenCookie);
   }, []);
 
