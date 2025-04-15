@@ -36,17 +36,34 @@ export const CardCup = ({
     parseAsArrayOf(parseAsString).withDefault([]),
   );
 
-  const additionalListUnselected = additional.filter(
-    ({ id }) => !additionalListId.includes(id!),
+  const firstQuantityAdditionalIds = additionalListId.slice(
+    0,
+    quantity_additional,
   );
 
-  const additionalListSelected = additional.filter(({ id }) =>
+  const additionalCurrent =
+    additionalListId.length >= quantity_additional
+      ? additional.reduce((acc, add) => {
+          if (add.price > 0) return [...acc, add];
+
+          if (!firstQuantityAdditionalIds.includes(add.id!))
+            return [...acc, { ...add, price: 2 }];
+
+          return [...acc, add];
+        }, [] as AdditionalType[])
+      : additional;
+
+  const additionalListUnselected = additionalCurrent.filter(
+    ({ id }) => !additionalListId.includes(id!),
+  );
+  const additionalListSelected = additionalCurrent.filter(({ id }) =>
     additionalListId.includes(id!),
   );
 
   const priceCup =
     price + additionalListSelected.reduce((acc, { price }) => acc + price, 0);
 
+  console.log();
   const { addCup } = useOrderStore();
   return (
     <>
@@ -61,9 +78,10 @@ export const CardCup = ({
 
         <div className="flex flex-wrap gap-2">
           {additionalListId?.map((additionalId) => {
-            const currentAdditional = additional.find(
+            const currentAdditional = additionalCurrent.find(
               ({ id }) => id === additionalId,
             );
+
             return (
               <Button
                 key={additionalId}
@@ -83,8 +101,8 @@ export const CardCup = ({
             );
           })}
 
-          {additionalListId.length < quantity_additional &&
-            additionalListUnselected.map(({ name, id, price }) => (
+          {additionalListUnselected.map(({ name, id, price }) => {
+            return (
               <Button
                 key={id}
                 className="rounded-full border-2 border-dashed"
@@ -95,7 +113,8 @@ export const CardCup = ({
               >
                 <Plus /> {name} {price > 0 && toBRL(price)}
               </Button>
-            ))}
+            );
+          })}
         </div>
       </CardCupContainer>
 
