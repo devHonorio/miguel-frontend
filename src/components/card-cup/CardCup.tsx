@@ -59,9 +59,14 @@ export const CardCupImage = () => {
   );
 };
 
-export const CardCupSize = ({ children }: Children) => {
+export const CardCupSize = ({
+  children,
+  className,
+}: Children & { className?: string }) => {
   return (
-    <div className="text-2xl font-black text-black/60">Copo {children}ml</div>
+    <div className={`text-2xl font-black text-black/60 ${className}`}>
+      Copo {children}ml
+    </div>
   );
 };
 
