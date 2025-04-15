@@ -118,7 +118,9 @@ export const CardCup = ({
         </div>
       </CardCupContainer>
 
-      <div className="flex gap-5 rounded-4xl bg-white p-10">
+      <div className="py-14" />
+
+      <div className="fixed bottom-5 flex gap-5 rounded-4xl bg-white p-10 shadow">
         <Link href="/orderDetails">
           <Button
             variant="outline"
