@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { deleteCookie, getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 
 interface AuthButtonProps {
   className?: string;
@@ -21,7 +21,12 @@ export const AuthButton = ({
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    setLogin(!!getCookie("token"));
+    const main = async () => {
+      const token = await getCookie("token");
+      setLogin(!!token);
+    };
+
+    main();
   }, []);
 
   if (pathName === "/login") {
@@ -34,8 +39,8 @@ export const AuthButton = ({
         <Button
           size={size}
           variant="destructive"
-          onClick={() => {
-            deleteCookie("token");
+          onClick={async () => {
+            await deleteCookie("token");
           }}
           className={className}
         >
@@ -45,7 +50,7 @@ export const AuthButton = ({
 
       {!login && (
         <Button size={size} variant="secondary" className={className}>
-          Logar
+          <LogIn /> Logar
         </Button>
       )}
     </Link>
