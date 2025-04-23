@@ -84,6 +84,14 @@ export const CardCupDescription = ({ children }: Children) => {
   );
 };
 
-export const CardCupPrice = ({ price }: { price: number }) => {
-  return <div className="text-3xl font-black">{toBRL(price)}</div>;
+export const CardCupPrice = ({
+  price,
+  className,
+}: {
+  price: number;
+  className?: string;
+}) => {
+  return (
+    <div className={`text-3xl font-black ${className}`}>{toBRL(price)}</div>
+  );
 };

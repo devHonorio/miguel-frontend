@@ -4,8 +4,7 @@ import Image from "next/image";
 
 import { Navigation } from "@/components/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { CartButton } from "@/components/cart-button";
 
 const paths = [{ path: "/catalogo", name: "Catálogo" }];
 
@@ -18,11 +17,7 @@ export default async function PublicLayout({ children }: LayoutProps) {
         </Link>
 
         <div className="flex gap-2">
-          <Link href="/orderDetails">
-            <Button size="icon">
-              <ShoppingCart />
-            </Button>
-          </Link>
+          <CartButton />
           <Navigation paths={paths} />
         </div>
       </header>

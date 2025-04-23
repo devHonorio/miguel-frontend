@@ -2,7 +2,6 @@
 import { useOrderStore } from "@/app/store/order";
 import { toBRL } from "@/app/utils";
 import {
-  CardCupContainer,
   CardCupDescription,
   CardCupPrice,
   CardCupSize,
@@ -26,7 +25,7 @@ export default function OrderDetails() {
   }, []);
 
   return (
-    <div className="bg-primary/5 flex w-full flex-col items-center gap-10 pt-6 pb-48">
+    <div className="bg-primary/5 flex w-full flex-col items-center gap-10 px-5 pt-6 pb-48">
       {!cups.length && (
         <div className="flex flex-1 flex-col items-center justify-center gap-2">
           <ShoppingCart className="h-24 w-24 text-black/60" />
@@ -34,10 +33,13 @@ export default function OrderDetails() {
         </div>
       )}
       {cups.map(({ size, price, additional, id }) => (
-        <CardCupContainer key={id}>
-          <div className="bg-primary -mt-12 flex gap-2 rounded-full p-5 text-white">
+        <div
+          key={id}
+          className="flex w-full max-w-sm flex-col gap-2 rounded-4xl bg-white p-5"
+        >
+          <div className="bg-primary -mt-8 flex gap-2 rounded-3xl p-4 text-white">
             <CupSoda />
-            <CardCupSize className="text-white">{size}</CardCupSize>
+            <CardCupSize className="text-xl text-white">{size}</CardCupSize>
           </div>
 
           <CardCupDescription>
@@ -45,7 +47,7 @@ export default function OrderDetails() {
           </CardCupDescription>
 
           <div className="flex justify-between">
-            <CardCupPrice price={price} />
+            <CardCupPrice price={price} className="text-xl" />
             <Button
               variant="destructive"
               className="rounded-full"
@@ -54,7 +56,7 @@ export default function OrderDetails() {
               <Trash2 />
             </Button>
           </div>
-        </CardCupContainer>
+        </div>
       ))}
 
       <div className="fixed right-0 bottom-0 left-0 flex flex-col items-end gap-5 bg-white p-10">
