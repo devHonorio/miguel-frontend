@@ -17,7 +17,7 @@ function Input({
 }: React.ComponentProps<"input"> & InputProps) {
   const id = React.useId();
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex w-full flex-col gap-1">
       {label && <Label htmlFor={id}>{label}</Label>}
       <input
         id={id}
