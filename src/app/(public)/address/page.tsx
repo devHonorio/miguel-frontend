@@ -7,22 +7,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChevronRight, Plus } from "lucide-react";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { api } from "../services";
 
-export default function Address() {
+export default async function Address() {
+  const cookiesStore = await cookies();
+
+  const token = cookiesStore.get("token")?.value;
+
+  const response = await api.get("/address/user", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const addresses = response.data as { address_complete: string; id: string }[];
+
   return (
     <div className="flex flex-wrap content-start gap-5 px-5 py-5">
-      {Array.from({ length: 0 }).map((_, i) => (
-        <Card key={i} className="h-min">
-          <CardHeader>
-            <CardTitle>Minha Casa</CardTitle>
-          </CardHeader>
-
+      {addresses.map(({ address_complete, id }) => (
+        <Card key={id} className="h-min">
           <CardContent>
-            <p>Rua Papa João Paulo II - 538, Água Verde, Ampére</p>
+            <p className="text-black/80 uppercase">{address_complete}</p>
           </CardContent>
           <CardFooter className="flex items-center justify-between">
             <p>R$ 4,00</p>
+
             <Button variant="secondary" size="icon">
               <ChevronRight />
             </Button>
