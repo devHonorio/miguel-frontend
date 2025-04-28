@@ -13,26 +13,37 @@ interface Props {
 }
 
 export default async function Complement({ params }: Props) {
-  const { type, name, number } = await params;
+  const { type, name, number, district } = await params;
 
   const typeDecode = decodeURI(type);
   const nameDecode = decodeURI(name);
+  const districtDecode = decodeURI(district);
+
+  const path =
+    typeDecode === "linha"
+      ? `/address/new/linha`
+      : `/address/new/${type}/${name}`;
 
   return (
     <>
-      <Link href={`/address/new/${type}/${name}`} className="absolute top-5">
+      <Link href={path} className="absolute top-5">
         <Button variant="secondary">
           <ArrowLeft /> Voltar
         </Button>
       </Link>
 
-      <h1 className="text-4xl font-bold">Qual nome do Bairro?</h1>
+      <h1 className="text-4xl font-bold">Qual nome da cidade?</h1>
 
       <p className="capitalize">
-        {typeDecode} {nameDecode} - {number}
+        {typeDecode} {nameDecode} - {number}, {districtDecode}
       </p>
 
-      <Form type={typeDecode} name={nameDecode} number={number} />
+      <Form
+        type={typeDecode}
+        name={nameDecode}
+        number={number}
+        district={districtDecode}
+      />
     </>
   );
 }
