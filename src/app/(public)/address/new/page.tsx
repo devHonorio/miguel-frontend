@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-const types = ["rua", "avenida", "linha ou comunidade"];
+const types = ["rua", "avenida", "linha"];
 export default function TypeAddress() {
   return (
     <>
