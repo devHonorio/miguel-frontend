@@ -11,6 +11,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { api } from "../services";
 import { ButtonDelete } from "./ButtonDelete";
+import { toBRL } from "@/app/utils";
 
 export default async function Address() {
   const cookiesStore = await cookies();
@@ -21,17 +22,21 @@ export default async function Address() {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  const addresses = response.data as { address_complete: string; id: string }[];
+  const addresses = response.data as {
+    address_complete: string;
+    id: string;
+    shipping_price: number;
+  }[];
 
   return (
     <div className="flex flex-wrap content-start gap-5 px-5 py-5">
-      {addresses.map(({ address_complete, id }) => (
+      {addresses.map(({ address_complete, id, shipping_price }) => (
         <Card key={id} className="h-min">
           <CardContent>
             <p className="text-black/80 uppercase">{address_complete}</p>
           </CardContent>
           <CardFooter className="flex items-center justify-between">
-            <p>R$ 4,00</p>
+            <p>{toBRL(shipping_price)}</p>
 
             <div className="space-x-2">
               <ButtonDelete id={id} />
