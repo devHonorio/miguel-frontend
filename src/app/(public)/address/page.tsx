@@ -10,6 +10,7 @@ import { ChevronRight, Plus } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { api } from "../services";
+import { ButtonDelete } from "./ButtonDelete";
 
 export default async function Address() {
   const cookiesStore = await cookies();
@@ -32,9 +33,13 @@ export default async function Address() {
           <CardFooter className="flex items-center justify-between">
             <p>R$ 4,00</p>
 
-            <Button variant="secondary" size="icon">
-              <ChevronRight />
-            </Button>
+            <div className="space-x-2">
+              <ButtonDelete id={id} />
+
+              <Button variant="secondary" size="icon">
+                <ChevronRight />
+              </Button>
+            </div>
           </CardFooter>
         </Card>
       ))}
