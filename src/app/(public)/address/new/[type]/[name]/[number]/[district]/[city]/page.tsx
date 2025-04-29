@@ -6,7 +6,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { useApi } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { ButtonSetAddress } from "./ButtonSetAddress";
 
@@ -53,7 +53,11 @@ export default function Complement() {
       ? `/address/new/${type}/${name}/0/zona rural`
       : `/address/new/${type}/${name}/${number}/${district}`;
 
-  const [showForm, setShowForm] = useState(!!data.length || isLoading);
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    setShowForm(!data.length);
+  }, [isLoading, data.length]);
 
   if (isLoading) return <Loader2 className="animate-spin" />;
 
