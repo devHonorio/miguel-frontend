@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { ParsedUrlQuery } from "querystring";
+import { ButtonSetAddress } from "./ButtonSetAddress";
 
 interface Params extends ParsedUrlQuery {
   name: string;
@@ -51,6 +52,7 @@ export default function Complement() {
     type === "linha"
       ? `/address/new/${type}/${name}/0/zona rural`
       : `/address/new/${type}/${name}/${number}/${district}`;
+
   const [showForm, setShowForm] = useState(!!data.length || isLoading);
 
   if (isLoading) return <Loader2 className="animate-spin" />;
@@ -72,13 +74,12 @@ export default function Complement() {
           <h1>Qual dessas referências é perto da sua casa?</h1>
           <div className="space-y-2">
             {data?.map(({ id, complement }, i) => (
-              <div
+              <ButtonSetAddress
                 key={id}
-                className="flex gap-2 rounded-md bg-black/5 px-4 py-2"
-              >
-                <div>{i + 1} - </div>
-                <p className="capitalize">{complement}</p>
-              </div>
+                id={id}
+                complement={complement}
+                index={i}
+              />
             ))}
 
             <div
