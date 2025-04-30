@@ -30,19 +30,31 @@ export const Form = ({ type }: FormProps) => {
   });
 
   const { push } = useRouter();
+
   return (
     <form
       className="flex flex-col gap-2"
       onSubmit={handleSubmit(({ name }) => {
-        push(`/address/new/${type}/${name}`);
+        const path =
+          type === "linha"
+            ? `/address/new/linha/${name}/0/zona rural/`
+            : `/address/new/${type}/${name}`;
+
+        push(path);
       })}
     >
-      <div className="capitalize">{type}:</div>
-      <Input
-        placeholder={`Nome da ${type}`}
-        {...register("name")}
-        error={errors.name?.message}
-      />
+      <div className="flex h-9 w-full items-center rounded-md border bg-transparent px-3 py-1 text-base shadow-xs md:text-sm">
+        <div className="capitalize">{type}</div>
+        <Input
+          className="w-full border-none shadow-none focus-visible:ring-0"
+          placeholder={`nome da ${type}`}
+          {...register("name")}
+        />
+      </div>
+
+      {errors.name?.message && (
+        <p className="text-red-600">{errors.name?.message}</p>
+      )}
 
       <Button>Continuar</Button>
     </form>

@@ -11,6 +11,7 @@ interface FormProps {
   type: string;
   name: string;
   number: number;
+  district: string;
 }
 
 const schema = z.object({
@@ -19,7 +20,7 @@ const schema = z.object({
 
 type typeSchema = z.infer<typeof schema>;
 
-export const Form = ({ name, number, type }: FormProps) => {
+export const Form = ({ name, number, type, district }: FormProps) => {
   const {
     register,
     handleSubmit,
@@ -34,12 +35,12 @@ export const Form = ({ name, number, type }: FormProps) => {
     <form
       className="flex flex-col gap-2"
       onSubmit={handleSubmit(({ city }) => {
-        push(`/address/new/${type}/${name}/${number}/${city}`);
+        push(`/address/new/${type}/${name}/${number}/${district}/${city}`);
       })}
     >
       <Input
-        label="Bairro"
-        placeholder="ex: Água Verde"
+        label="Cidade"
+        placeholder="ex: Ampére"
         {...register("city")}
         error={errors.city?.message}
       />
