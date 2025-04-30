@@ -41,9 +41,11 @@ export default async function Address() {
             <div className="space-x-2">
               <ButtonDelete id={id} />
 
-              <Button variant="secondary" size="icon">
-                <ChevronRight />
-              </Button>
+              <Link href={`/address/${id}`}>
+                <Button variant="secondary" size="icon">
+                  <ChevronRight />
+                </Button>
+              </Link>
             </div>
           </CardFooter>
         </Card>
