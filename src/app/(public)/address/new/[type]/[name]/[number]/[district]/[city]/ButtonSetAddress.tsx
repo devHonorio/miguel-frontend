@@ -1,4 +1,3 @@
-import { revalidateAddress } from "@/app/actions";
 import { useApi } from "@/hooks";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -31,8 +30,8 @@ export const ButtonSetAddress = ({
     },
 
     onSuccess: () => {
+      toast.success("Endereço adicionado.");
       push("/address");
-      revalidateAddress();
     },
   });
 

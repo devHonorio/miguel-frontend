@@ -30,7 +30,6 @@ interface CreateAddress {
   number: number;
   district: string;
   city: string;
-  user_id: string;
   complement: string;
 }
 
@@ -70,7 +69,6 @@ export const Form = ({ name, number, type, city, district }: FormProps) => {
           district,
           city,
           complement,
-          user_id: "",
         });
       })}
     >
