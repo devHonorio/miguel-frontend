@@ -36,34 +36,44 @@ export const CardCup = ({
     parseAsArrayOf(parseAsString).withDefault([]),
   );
 
-  const firstQuantityAdditionalIds = additionalListId.slice(
-    0,
-    quantity_additional,
-  );
+  const additionalCurrentWithPrice = additional.map(({ id }) => {
+    const currentAdditional = additional.find((add) => id === add.id);
 
-  const additionalCurrent =
-    additionalListId.length >= quantity_additional
-      ? additional.reduce((acc, add) => {
-          if (add.price > 0) return [...acc, add];
+    if (!currentAdditional) {
+      throw new Error("Adicional não encontrado.");
+    }
+    return { ...currentAdditional };
+  });
 
-          if (!firstQuantityAdditionalIds.includes(add.id!))
-            return [...acc, { ...add, price: 2 }];
+  let countAdditionalFree = 0;
 
-          return [...acc, add];
-        }, [] as AdditionalType[])
-      : additional;
+  const additionalListSelected = additionalCurrentWithPrice
+    .filter(({ id }) => additionalListId.includes(id!))
+    .map((add) => {
+      if (add.price > 0) return add;
 
-  const additionalListUnselected = additionalCurrent.filter(
-    ({ id }) => !additionalListId.includes(id!),
-  );
-  const additionalListSelected = additionalCurrent.filter(({ id }) =>
-    additionalListId.includes(id!),
-  );
+      if (countAdditionalFree < quantity_additional) {
+        countAdditionalFree++;
+
+        return add;
+      }
+      return { ...add, price: 2 };
+    });
+
+  const additionalListUnselected = additionalCurrentWithPrice
+    .filter(({ id }) => !additionalListId.includes(id!))
+    .map((add) => {
+      if (add.price > 0) return add;
+
+      if (countAdditionalFree >= quantity_additional) {
+        return { ...add, price: 2 };
+      }
+      return add;
+    });
 
   const priceCup =
     price + additionalListSelected.reduce((acc, { price }) => acc + price, 0);
 
-  console.log();
   const { addCup } = useOrderStore();
   return (
     <>
@@ -77,26 +87,18 @@ export const CardCup = ({
         <CardCupPrice price={priceCup} />
 
         <div className="flex flex-wrap gap-2">
-          {additionalListId?.map((additionalId) => {
-            const currentAdditional = additionalCurrent.find(
-              ({ id }) => id === additionalId,
-            );
-
+          {additionalListSelected?.map(({ id, name, price }) => {
             return (
               <Button
-                key={additionalId}
+                key={id}
                 className="rounded-full"
                 onClick={() => {
                   setAdditionalListId(
-                    additionalListId.filter(
-                      (id) => id !== currentAdditional?.id,
-                    ),
+                    additionalListId.filter((addId) => addId !== id),
                   );
                 }}
               >
-                <Check /> {currentAdditional?.name}{" "}
-                {currentAdditional!.price > 0 &&
-                  toBRL(currentAdditional!.price)}
+                <Check /> {name} {price > 0 && toBRL(price)}
               </Button>
             );
           })}
