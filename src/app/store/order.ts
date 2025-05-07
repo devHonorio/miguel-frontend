@@ -7,10 +7,12 @@ interface OrderStore {
   cups: CupStore[];
   addCup: (cup: CupStore) => void;
   removeCup: (id: string) => void;
+  clean: () => void;
 }
 
-interface CupStore extends Pick<CupUpdateType, "size" | "price" | "id"> {
+export interface CupStore extends Pick<CupUpdateType, "size" | "price" | "id"> {
   additional: Pick<AdditionalType, "id" | "name">[];
+  cup_id: string;
 }
 
 export const useOrderStore = create<OrderStore>()(
@@ -23,6 +25,9 @@ export const useOrderStore = create<OrderStore>()(
         return set((state) => ({
           cups: state.cups.filter((cup) => cup.id !== id),
         }));
+      },
+      clean() {
+        return set({ cups: [] });
       },
     }),
     { name: "order" },

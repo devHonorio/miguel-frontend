@@ -24,6 +24,7 @@ export default async function Cup({ params }: CupProps) {
   return (
     <div className="bg-primary/5 flex w-full flex-col items-center gap-5 p-5">
       <CardCup
+        cup_id={id}
         additional={additional}
         description={cup.description}
         price={cup.price}
