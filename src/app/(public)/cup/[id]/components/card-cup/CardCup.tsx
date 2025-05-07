@@ -22,6 +22,7 @@ interface CardCupProps
     "description" | "price" | "size" | "quantity_additional"
   > {
   additional: AdditionalType[];
+  cup_id: string;
 }
 
 export const CardCup = ({
@@ -30,6 +31,8 @@ export const CardCup = ({
   price,
   additional,
   quantity_additional,
+
+  cup_id,
 }: CardCupProps) => {
   const [additionalListId, setAdditionalListId] = useQueryState(
     "additionalListId",
@@ -138,9 +141,10 @@ export const CardCup = ({
                     id: currentAdditional?.id,
                   };
                 }),
-                id: crypto.randomUUID(),
+                cup_id,
                 price: priceCup,
                 size,
+                id: crypto.randomUUID(),
               });
             }}
           >
@@ -166,6 +170,7 @@ export const CardCup = ({
                 id: crypto.randomUUID(),
                 price: priceCup,
                 size,
+                cup_id,
               });
             }}
           >
