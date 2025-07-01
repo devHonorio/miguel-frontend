@@ -1,19 +1,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "./schema";
+import { signupSchema } from "./schema";
 
 export const useLoginForm = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(loginSchema.pick({ phone: true })) });
+  } = useForm({ resolver: zodResolver(signupSchema) });
 
   return {
     register,
     handleSubmit,
-    setValue,
     errors,
   };
 };

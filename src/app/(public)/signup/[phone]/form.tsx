@@ -3,15 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLoginForm } from "./useLoginForm";
 
-import User from "@/entities/User";
 import { useQuery } from "./useQuery";
 
-export default function Login() {
+export function Form({ phone }: { phone: string }) {
   const {
     register,
     handleSubmit,
-    errors: { phone },
-    setValue,
+    errors: { name },
   } = useLoginForm();
 
   const { mutate, isPending } = useQuery();
@@ -19,16 +17,15 @@ export default function Login() {
   return (
     <form
       className="flex w-full flex-col gap-5"
-      onSubmit={handleSubmit(({ phone }) => {
-        mutate(phone);
+      onSubmit={handleSubmit((data) => {
+        mutate({ phone, name: data.name });
       })}
     >
       <Input
-        {...register("phone")}
-        label="Telefone/WhatsApp"
-        placeholder="(46) 9 9999-9999"
-        error={phone?.message}
-        onChange={(e) => setValue("phone", User.phoneMask(e.target.value))}
+        {...register("name")}
+        label="Nome completo"
+        placeholder="José Honorio"
+        error={name?.message}
       />
 
       <Button type="submit" isLoading={isPending}>
