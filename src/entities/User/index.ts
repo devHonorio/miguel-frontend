@@ -23,10 +23,31 @@ function phoneMask(phone: string) {
   return resultado;
 }
 
+function haveNameAndLastName(fullname: string) {
+  return fullname.includes(" ");
+}
+
+function validationLengthName(fullname: string) {
+  const splitName = fullname.split(" ");
+
+  const shortName = splitName.filter(
+    (name) => name.length < UserPropertiesValues.LENGTH_FOR_NAME,
+  );
+
+  return shortName.length === 0;
+}
+
+function removeUnwantedCharactersOfName(fullname: string) {
+  return fullname.replace(/[^a-zA-Z\sçãẽĩõũâêîôûéóáíú]/g, "").trim();
+}
+
 const User = {
   removePhoneStr,
   phoneValidator,
   phoneMask,
+  haveNameAndLastName,
+  validationLengthName,
+  removeUnwantedCharactersOfName,
 };
 
 export default User;

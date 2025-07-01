@@ -1,35 +1,30 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { LoginType } from "./schema";
 import { toast } from "sonner";
-import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { api } from "../services";
-
-const ONE_DAY_IN_SECONDS = 86400;
 
 export const useQuery = () => {
   const { push } = useRouter();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: LoginType) => {
-      const response = await api.post<{ access_token: string }>("/login", data);
+    mutationFn: async (phone: string) => {
+      const response = await api.post("/send-code", { phone });
 
-      return response.data.access_token;
+      return response.data;
     },
 
-    onSuccess: (token: string) => {
-      if (!token) {
-        toast("BASE_URL: " + process.env.BACK_URL);
-        return;
-      }
-      setCookie("token", token, { maxAge: ONE_DAY_IN_SECONDS * 300 });
-      push("/");
-      toast.success("Logado com sucesso!");
+    onSuccess: (name: string, phone) => {
+      push(`verify-code/${phone}/${name}`);
     },
 
-    onError: (err: Error) => {
+    onError: (err: Error, phone) => {
       if (err instanceof AxiosError) {
+        if (err.status === 404) {
+          push(`/signup/${phone}`);
+          return;
+        }
+
         toast.error(JSON.stringify(err.response?.data.message));
         return;
       }

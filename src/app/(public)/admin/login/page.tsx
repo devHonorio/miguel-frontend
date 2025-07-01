@@ -10,7 +10,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    errors: { phone },
+    errors: { password, phone },
     setValue,
   } = useLoginForm();
 
@@ -19,8 +19,8 @@ export default function Login() {
   return (
     <form
       className="flex w-full flex-col gap-5"
-      onSubmit={handleSubmit(({ phone }) => {
-        mutate(phone);
+      onSubmit={handleSubmit((data) => {
+        mutate(data);
       })}
     >
       <Input
@@ -30,9 +30,15 @@ export default function Login() {
         error={phone?.message}
         onChange={(e) => setValue("phone", User.phoneMask(e.target.value))}
       />
-
+      <Input
+        {...register("password")}
+        label="Senha"
+        placeholder="******"
+        type="password"
+        error={password?.message}
+      />
       <Button type="submit" isLoading={isPending}>
-        Avançar
+        Entrar
       </Button>
     </form>
   );

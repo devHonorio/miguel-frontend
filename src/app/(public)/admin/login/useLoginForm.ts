@@ -8,7 +8,7 @@ export const useLoginForm = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(loginSchema.pick({ phone: true })) });
+  } = useForm({ resolver: zodResolver(loginSchema) });
 
   return {
     register,
