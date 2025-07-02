@@ -22,7 +22,7 @@ export interface OrderItem {
 }
 
 export default function Confirmation() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   const { cups, clean } = useOrderStore();
 
@@ -51,6 +51,7 @@ export default function Confirmation() {
           additional_ids: additional.map((add) => add.id!),
           cup_id,
         })),
+        address_id: id,
       };
 
       const response = await api.post("/order", order);
