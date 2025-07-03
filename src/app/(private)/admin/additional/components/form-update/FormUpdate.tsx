@@ -18,8 +18,8 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
     register,
     setPrice,
     setPriceTemplate,
-
     reset,
+    setInStock,
   } = useFormUpdate();
 
   const { isPending, mutate, data, isLoading } = useUpdate(id);
@@ -29,6 +29,11 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
     reset({ ...data, priceTemplate: toBRL(data?.price ?? 0) });
     setStock(!!data?.in_stock);
   }, [data, reset]);
+
+  const handleStock = (value: boolean) => {
+    setInStock(value);
+    setStock(value);
+  };
 
   if (isLoading) return <Loader2 className="animate-spin" />;
 
@@ -57,7 +62,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
       <SwitchWithDescription
         title="Em estoque"
         description="Se não estiver ativo não ira aparecer na lista de adicionais"
-        onCheckedChange={setStock}
+        onCheckedChange={handleStock}
         checked={stock}
       />
 
