@@ -10,6 +10,7 @@ export const additionalSchema = z.object({
     .number({
       errorMap: () => ({ message: "Adicional deve ser um numero." }),
     })
+    .int()
     .min(0, "Preço deve ser um numero positivo."),
   priceTemplate: z.string().optional(),
   in_stock: z.boolean().optional().default(true),

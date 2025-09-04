@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { additionalSchema } from "../schema";
-import { cleanAndFormatBRL, cleanFormatBRLAndParseReal } from "@/app/utils";
+import { cleanAndFormatBRL } from "@/app/utils";
+import { cleanFormatBRLAndParseCents } from "@/app/utils/cleanFormatBRLAndParseCents";
 
 export const useFormUpdate = () => {
   const {
@@ -21,9 +22,9 @@ export const useFormUpdate = () => {
   };
 
   const setPrice = (value: string) => {
-    const priceInReal = cleanFormatBRLAndParseReal(value);
+    const priceInCents = cleanFormatBRLAndParseCents(value);
 
-    setValue("price", priceInReal);
+    setValue("price", priceInCents);
   };
 
   const setInStock = (checked: boolean) => {

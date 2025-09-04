@@ -5,8 +5,8 @@ import { SwitchWithDescription } from "@/components/switch-with-description";
 import { useFormUpdate } from "../../hooks/form";
 import { useUpdate } from "../../hooks/query";
 import { useEffect, useState } from "react";
-import { toBRL } from "@/app/utils";
 import { Loader2 } from "lucide-react";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 interface FormUpdateProps {
   id: string;
 }
@@ -26,7 +26,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
   const [stock, setStock] = useState(true);
 
   useEffect(() => {
-    reset({ ...data, priceTemplate: toBRL(data?.price ?? 0) });
+    reset({ ...data, priceTemplate: toCentsInBRL(data?.price ?? 0) });
     setStock(!!data?.in_stock);
   }, [data, reset]);
 

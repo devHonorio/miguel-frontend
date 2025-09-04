@@ -21,7 +21,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useList } from "./hooks/query/useList";
-import { toBRL } from "@/app/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,6 +39,7 @@ import {
 import { useDelete } from "./hooks/query/useDelete";
 import { FormUpdate } from "./components/form-update";
 import Link from "next/link";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
 export default function Additional() {
   const [additionalStates, setAdditionalStates] = useQueryStates({
@@ -101,7 +101,7 @@ export default function Additional() {
             data?.map(({ id, name, price, in_stock }) => (
               <TableRow key={id}>
                 <TableCell>{name}</TableCell>
-                <TableCell>{toBRL(price)}</TableCell>
+                <TableCell>{toCentsInBRL(price)}</TableCell>
                 <TableCell>{in_stock ? "sim" : "não"}</TableCell>
                 <TableCell>
                   <DropdownMenu>

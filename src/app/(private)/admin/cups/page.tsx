@@ -42,8 +42,8 @@ import {
 import { useDelete, useGet } from "./hooks/query";
 import { FormCreate } from "./components/form-create";
 import { FormUpdate } from "./components/form-update";
-import { toBRL } from "@/app/utils";
 import Link from "next/link";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
 export default function Cups() {
   const { data, isPending } = useGet();
@@ -145,7 +145,7 @@ export default function Cups() {
           {data?.map(({ size, id, in_stock, price }) => (
             <TableRow key={id}>
               <TableCell>{size}ml</TableCell>
-              <TableCell>{toBRL(+price)}</TableCell>
+              <TableCell>{toCentsInBRL(+price)}</TableCell>
               <TableCell>{in_stock ? "sim" : "não"}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>

@@ -7,6 +7,7 @@ export const createCupSchema = z.object({
     .int("Numero deve ser um inteiro."),
   price: z.coerce
     .number({ errorMap: () => ({ message: "Preço é obrigatório." }) })
+    .int()
     .min(1, "Preço deve ser maior de R$ 1,00."),
   priceTemplate: z.string().optional(),
   in_stock: z.boolean(),

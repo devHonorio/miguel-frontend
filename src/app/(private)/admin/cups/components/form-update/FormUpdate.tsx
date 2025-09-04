@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useFormUpdate } from "../../hooks/form";
 import { Textarea } from "@/components/ui/textarea";
 import { SwitchWithDescription } from "@/components/switch-with-description";
-import { toBRL } from "@/app/utils";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
 interface FormUpdateProps {
   id: string;
@@ -33,7 +33,7 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
 
   useEffect(() => {
     setStock(!!data?.in_stock);
-    reset({ ...data, priceTemplate: toBRL(data?.price ?? 0) });
+    reset({ ...data, priceTemplate: toCentsInBRL(data?.price ?? 0) });
   }, [data, reset]);
 
   if (isLoading) return <Loader2 className="animate-spin" />;
