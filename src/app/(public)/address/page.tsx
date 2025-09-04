@@ -11,7 +11,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { api } from "../services";
 import { ButtonDelete } from "./ButtonDelete";
-import { toBRL } from "@/app/utils";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
 export default async function Address() {
   const cookiesStore = await cookies();
@@ -30,13 +30,24 @@ export default async function Address() {
 
   return (
     <div className="flex flex-wrap content-start gap-5 px-5 py-5">
+      <Card className="h-min">
+        <CardContent className="flex items-center gap-2">
+          <p className="text-black/80 uppercase">Retirar no local</p>
+          <Link href={`/address/pick-up-local`}>
+            <Button variant="secondary" size="icon">
+              <ChevronRight />
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
+
       {addresses.map(({ address_complete, id, shipping_price }) => (
         <Card key={id} className="h-min">
           <CardContent>
             <p className="text-black/80 uppercase">{address_complete}</p>
           </CardContent>
           <CardFooter className="flex items-center justify-between">
-            <p>{toBRL(shipping_price)}</p>
+            <p>{toCentsInBRL(shipping_price)}</p>
 
             <div className="space-x-2">
               <ButtonDelete id={id} />

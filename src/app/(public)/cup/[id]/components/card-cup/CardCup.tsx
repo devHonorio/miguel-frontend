@@ -3,7 +3,7 @@
 import { AdditionalType } from "@/app/(private)/admin/additional/hooks/schema";
 import { CupUpdateType } from "@/app/(private)/admin/cups/schema";
 import { useOrderStore } from "@/app/store/order";
-import { toBRL } from "@/app/utils";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 import {
   CardCupContainer,
   CardCupDescription,
@@ -101,7 +101,7 @@ export const CardCup = ({
                   );
                 }}
               >
-                <Check /> {name} {price > 0 && toBRL(price)}
+                <Check /> {name} {price > 0 && toCentsInBRL(price)}
               </Button>
             );
           })}
@@ -116,7 +116,7 @@ export const CardCup = ({
                   setAdditionalListId([...additionalListId, id!]);
                 }}
               >
-                <Plus /> {name} {price > 0 && toBRL(price)}
+                <Plus /> {name} {price > 0 && toCentsInBRL(price)}
               </Button>
             );
           })}

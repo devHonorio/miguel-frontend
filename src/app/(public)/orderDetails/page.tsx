@@ -1,6 +1,6 @@
 "use client";
 import { useOrderStore } from "@/app/store/order";
-import { toBRL } from "@/app/utils";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 import {
   CardCupDescription,
   CardCupPrice,
@@ -61,7 +61,9 @@ export default function OrderDetails() {
 
       <div className="fixed right-0 bottom-0 left-0 flex flex-col items-end gap-5 bg-white p-10">
         {!!cups.length && (
-          <p className="text-xl font-black text-black/70">{toBRL(cupsPrice)}</p>
+          <p className="text-xl font-black text-black/70">
+            {toCentsInBRL(cupsPrice)}
+          </p>
         )}
         <div className="space-x-2">
           {!!cups.length && (
