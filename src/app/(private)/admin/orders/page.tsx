@@ -107,7 +107,6 @@ export default function Orders() {
         `/orders?search=${orderStates.search}&take=${orderStates.take}&skip=${orderStates.skip}`,
       );
 
-      console.log(response.data);
       return response.data;
     },
   });
