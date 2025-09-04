@@ -35,8 +35,8 @@ export const FormCreate = () => {
     take: parseAsInteger.withDefault(0),
     skip: parseAsInteger.withDefault(0),
 
-    queryClient: parseAsString.withDefault(""),
-    queryAddress: parseAsString.withDefault(""),
+    queryClient: parseAsString.withDefault("j"),
+    queryAddress: parseAsString.withDefault("j"),
   });
   const { order, setOrder } = useUrlState();
 
