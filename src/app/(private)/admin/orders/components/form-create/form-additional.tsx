@@ -57,7 +57,7 @@ export const AdditionalForm = ({ index }: AdditionalFormProps) => {
                     index: i,
                     data: {
                       id: value,
-                      price: currentAdditional.price * 100,
+                      price: currentAdditional.price,
                       label: currentAdditional.name,
                     },
                   });

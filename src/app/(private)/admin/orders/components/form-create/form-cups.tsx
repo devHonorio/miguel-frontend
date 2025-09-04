@@ -73,7 +73,7 @@ export const CupsForm = ({ control }: CupsFormProps) => {
                       setCup(i, {
                         id,
                         label,
-                        cupPrice: currentCup.price * 100,
+                        cupPrice: currentCup.price,
                         quantityAdditional: currentCup.quantity_additional,
                       });
                     }}
