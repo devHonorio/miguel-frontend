@@ -12,6 +12,7 @@ export const useApi = () => {
   api.interceptors.response.use(
     (res) => res,
     (err: AxiosError) => {
+      console.log(err.response?.data);
       if (err.status === 401) deleteCookie("token");
       throw err;
     },
