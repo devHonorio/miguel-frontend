@@ -4,9 +4,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
-import { toBRL } from "@/app/utils";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
 interface CardCupProps {
   id: string;
@@ -19,7 +19,7 @@ export const CardCup = ({ description, id, price, size }: CardCupProps) => {
   return (
     <CardCupContainer>
       <CardCupImage />
-      <CardCupSize>Copo {size}ml</CardCupSize>
+      <CardCupSize>{size}</CardCupSize>
 
       <CardCupDescription>{description}</CardCupDescription>
 
@@ -92,6 +92,8 @@ export const CardCupPrice = ({
   className?: string;
 }) => {
   return (
-    <div className={`text-3xl font-black ${className}`}>{toBRL(price)}</div>
+    <div className={`text-3xl font-black ${className}`}>
+      {toCentsInBRL(price)}
+    </div>
   );
 };
