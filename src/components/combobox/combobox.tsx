@@ -17,6 +17,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
@@ -81,10 +82,9 @@ export function Combobox({
         </DialogTrigger>
       )}
 
-      <></>
-
       <DialogContent overlay={overlay}>
         <DialogTitle>Procurar</DialogTitle>
+        <DialogDescription className="hidden" />
         <Command shouldFilter={shouldFilter}>
           <CommandInput onValueChange={onChange} />
           <CommandList>
