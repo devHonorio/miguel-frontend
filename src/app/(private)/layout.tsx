@@ -5,7 +5,13 @@ import Image from "next/image";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Cherry, ClipboardList, CupSoda, Menu } from "lucide-react";
+import {
+  Cherry,
+  ClipboardList,
+  CupSoda,
+  Menu,
+  NotebookTabs,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   Sheet,
@@ -17,6 +23,7 @@ import {
 import { AuthButton } from "@/components/auth-button";
 
 const paths = [
+  { path: "/admin/orders", name: "Pedidos", icon: <NotebookTabs /> },
   { path: "/admin/cups", name: "Copos", icon: <CupSoda /> },
   { path: "/admin/additional", name: "Adicionais", icon: <Cherry /> },
   { path: "/catalogo", name: "Catálogo", icon: <ClipboardList /> },

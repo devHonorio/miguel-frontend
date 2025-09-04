@@ -31,6 +31,7 @@ const redirectAdmin = async (req: NextRequest, token?: string) => {
 };
 
 const paths: PathType = {
+  "/admin/orders": redirectAdmin,
   "/admin/cups": redirectAdmin,
   "/admin/additional": redirectAdmin,
   "/login": async (req, token) => {
