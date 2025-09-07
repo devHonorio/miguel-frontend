@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { CreateOrderType } from "../../schema";
 import { AxiosError } from "axios";
-import { ListOrders } from "../../page";
 import { queryClient } from "@/providers/react-query";
 import { Select } from "@/components/select";
 import {
@@ -26,8 +25,10 @@ import {
 import { sleep500ms } from "@/app/utils/sleep500ms";
 import { CupsForm } from "../form-create/form-cups";
 import { useApi } from "@/hooks";
+import { ListOrders } from "../../page";
 
 export const FormEdit = () => {
+  const { order, setOrder } = useUrlState();
   const [orderStates, setOrderStates] = useQueryStates({
     modalEdit: parseAsBoolean.withDefault(false),
 
@@ -90,8 +91,6 @@ export const FormEdit = () => {
 
   const { api } = useApi();
 
-  const { order, setOrder } = useUrlState();
-
   const { control, handleSubmit, errors } = useFormCreate({
     ...order,
     totalPrice: order.total,
@@ -103,7 +102,7 @@ export const FormEdit = () => {
       className="flex flex-col gap-5"
       onSubmit={handleSubmit((data) => createOrder(data))}
     >
-      <Input value={orderStates.orderId} readOnly />
+      <Input value={orderStates.orderId} readOnly hidden className="hidden" />
 
       <Combobox
         data={
@@ -120,7 +119,7 @@ export const FormEdit = () => {
         shouldFilter={false}
         isLoading={isLoading}
         value={order.clientId}
-        onSelect={(value, label) => {
+        onSelect={({ value, label }) => {
           setOrder({ clientId: value, clientLabel: label });
         }}
         errorMessage={errors.clientId?.message}
@@ -153,9 +152,10 @@ export const FormEdit = () => {
         <>
           <Combobox
             data={
-              addresses?.map(({ id, address_complete }) => ({
+              addresses?.map(({ id, address_complete, shipping_price }) => ({
                 label: address_complete.toUpperCase(),
                 value: id,
+                meta: shipping_price,
               })) ?? []
             }
             label={order.addressLabel}
@@ -163,14 +163,11 @@ export const FormEdit = () => {
             onChange={(value) =>
               sleep500ms(() => setOrderStates({ queryAddress: value }))
             }
-            onSelect={(value, label) => {
-              const address = addresses?.find(({ id }) => id === value);
-
-              if (!address) return console.error("Endereço não encontrado");
+            onSelect={({ value, label, meta }) => {
               setOrder({
                 addressId: value,
                 addressLabel: label,
-                shippingPrice: address.shipping_price * 100,
+                shippingPrice: meta,
               });
             }}
             isLoading={isLoadingAddresses}

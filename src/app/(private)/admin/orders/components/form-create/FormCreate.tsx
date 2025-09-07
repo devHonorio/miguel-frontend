@@ -113,7 +113,7 @@ export const FormCreate = () => {
         shouldFilter={false}
         isLoading={isLoading}
         value={order.clientId}
-        onSelect={(value, label) => {
+        onSelect={({ label, value }) => {
           setOrder({ clientId: value, clientLabel: label });
         }}
         errorMessage={errors.clientId?.message}
@@ -146,9 +146,10 @@ export const FormCreate = () => {
         <>
           <Combobox
             data={
-              addresses?.map(({ id, address_complete }) => ({
+              addresses?.map(({ id, address_complete, shipping_price }) => ({
                 label: address_complete.toUpperCase(),
                 value: id,
+                meta: { id, address_complete, shipping_price },
               })) ?? []
             }
             label={order.addressLabel}
@@ -156,14 +157,11 @@ export const FormCreate = () => {
             onChange={(value) =>
               sleep500ms(() => setOrderStates({ queryAddress: value }))
             }
-            onSelect={(value, label) => {
-              const address = addresses?.find(({ id }) => id === value);
-
-              if (!address) return console.error("Endereço não encontrado");
+            onSelect={({ label, value, meta }) => {
               setOrder({
                 addressId: value,
                 addressLabel: label,
-                shippingPrice: address.shipping_price * 100,
+                shippingPrice: meta?.shipping_price,
               });
             }}
             isLoading={isLoadingAddresses}

@@ -7,8 +7,8 @@ import { Loader2, Plus, XCircle } from "lucide-react";
 import { useUrlState } from "../../hooks/useUrlState";
 import { useQuery } from "@tanstack/react-query";
 import { Additional } from "../../../additional/hooks/query/useList";
-import { toBRL } from "@/app/utils";
 import { useApi } from "@/hooks";
+import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
 interface AdditionalFormProps {
   index: number;
@@ -43,22 +43,20 @@ export const AdditionalForm = ({ index }: AdditionalFormProps) => {
                 data={data.map(({ id, name, price }) => ({
                   value: id,
                   label: name,
-                  complement: price ? toBRL(price) : undefined,
+                  complement: price ? toCentsInBRL(price) : undefined,
+                  meta: { name, id, price },
                 }))}
                 size="sm"
                 label={label}
                 value={id}
-                onSelect={(value) => {
-                  const currentAdditional = data.find(
-                    (add) => add.id === value,
-                  )!;
+                onSelect={(additional) => {
                   setAdditional({
                     cupIndex: index,
                     index: i,
                     data: {
-                      id: value,
-                      price: currentAdditional.price,
-                      label: currentAdditional.name,
+                      id: additional.value,
+                      price: additional.meta!.price,
+                      label: additional.meta!.name,
                     },
                   });
                 }}

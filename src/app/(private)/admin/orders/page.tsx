@@ -63,6 +63,8 @@ import { queryClient } from "@/providers/react-query";
 import { sleep500ms } from "@/app/utils/sleep500ms";
 import { FormEdit } from "./components/form-edit";
 import { useRouter } from "next/navigation";
+import { useUrlState } from "./hooks/useUrlState";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface ListOrders {
   id: string;
@@ -81,10 +83,13 @@ const StatusComponents = {
 };
 
 export default function Orders() {
+  const { clearAll } = useUrlState();
   const [orderStates, setOrderStates] = useQueryStates({
     modalCreate: parseAsBoolean.withDefault(false),
     modalAlertDelete: parseAsBoolean.withDefault(false),
+
     idDelete: parseAsString.withDefault(""),
+    orderId: parseAsString.withDefault(""),
 
     search: parseAsString.withDefault(""),
     take: parseAsInteger.withDefault(0),
@@ -177,20 +182,6 @@ export default function Orders() {
       };
     },
 
-    // initialData: {
-    //   address_id: "",
-    //   address_label: "Endereço",
-    //   client_id: "",
-    //   client_label: "Selecionar",
-    //   discount: 0,
-    //   is_delivery: false,
-    //   observations: "",
-    //   shipping_price: 0,
-    //   status: "rascunho",
-    //   total_price: 0,
-    //   cups: [],
-    // },
-
     onSuccess(orderData, orderId) {
       push(
         `?addressId=${orderData.address_id}&addressLabel=${orderData.address_label}&clientId=${orderData.client_id}&clientLabel=${orderData.client_label}&discount=${orderData.discount}&isDelivery=${orderData.is_delivery}&observations=${orderData.observations}&shippingPrice=${orderData.shipping_price}&status=${orderData.status}&cups=${JSON.stringify(
@@ -217,18 +208,23 @@ export default function Orders() {
       );
     },
   });
+
   return (
     <>
-      <Dialog open={isPendingOrder}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Carregando pedido...</DialogTitle>
-            <DialogDescription>Aguarde por favor</DialogDescription>
-          </DialogHeader>
-
-          <Loader2 className="mx-auto animate-spin" />
-        </DialogContent>
-      </Dialog>
+      {isPendingOrder && (
+        <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-black/60">
+          <Card>
+            <CardContent>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Loader2 className="animate-spin" />
+                  Carregando pedido...
+                </CardTitle>
+              </CardHeader>
+            </CardContent>
+          </Card>
+        </div>
+      )}
       <AlertDialog
         open={orderStates.modalAlertDelete}
         onOpenChange={(open) => setOrderStates({ modalAlertDelete: open })}
@@ -279,7 +275,10 @@ export default function Orders() {
       </div>
       <Dialog
         open={orderStates.modalCreate}
-        onOpenChange={(open) => setOrderStates({ modalCreate: open })}
+        onOpenChange={(open) => {
+          setOrderStates({ modalCreate: open });
+          if (!open) clearAll();
+        }}
       >
         <DialogContent>
           <DialogHeader>
@@ -292,7 +291,13 @@ export default function Orders() {
 
       <Dialog
         open={orderStates.modalEdit}
-        onOpenChange={(open) => setOrderStates({ modalEdit: open })}
+        onOpenChange={(open) => {
+          setOrderStates({ modalEdit: open });
+          if (!open) {
+            clearAll();
+            setOrderStates(null);
+          }
+        }}
       >
         <DialogContent>
           <DialogHeader>
