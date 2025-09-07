@@ -22,8 +22,8 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-interface ComboboxProps {
-  data: { value: string; label: string; complement?: string }[];
+interface ComboboxProps<T> {
+  data: { value: string; label: string; complement?: string; meta?: T }[];
   label?: string;
   size?: "default" | "sm" | "lg" | "icon" | null;
   overlay?: boolean;
@@ -31,11 +31,16 @@ interface ComboboxProps {
   shouldFilter?: boolean;
   isLoading?: boolean;
   value?: string;
-  onSelect?: (value: string, label: string) => void;
+  onSelect?: (data: {
+    value: string;
+    label: string;
+    complement?: string;
+    meta?: T;
+  }) => void;
   errorMessage?: string;
 }
 
-export function Combobox({
+export function Combobox<T>({
   data,
   label: labelProp = "Selecionar",
   size,
@@ -46,7 +51,7 @@ export function Combobox({
   value: valueProp = "",
   errorMessage,
   onSelect = () => {},
-}: ComboboxProps) {
+}: ComboboxProps<T>) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(valueProp);
   const [label, setLabel] = React.useState("");
@@ -113,7 +118,12 @@ export function Combobox({
                         }
                         setValue(item.value);
                         setLabel(item.label);
-                        onSelect(item.value, item.label);
+                        onSelect({
+                          value: item.value,
+                          label: item.label,
+                          complement: item.complement,
+                          meta: item.meta,
+                        });
                       }}
                     >
                       <div>
