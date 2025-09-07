@@ -12,13 +12,15 @@ import { z } from "zod";
 const cupsSchema = z.array(
   z.object({
     id: z.string(),
-    additional: z.array(
-      z.object({
-        id: z.string(),
-        price: z.coerce.number(),
-        label: z.string(),
-      }),
-    ),
+    additional: z
+      .array(
+        z.object({
+          id: z.string().default(""),
+          price: z.coerce.number().default(0),
+          label: z.string().default("adicional"),
+        }),
+      )
+      .default([]),
     price: z.coerce.number(),
     label: z.string().default("Tamanho ml"),
     quantityAdditional: z.coerce.number(),
@@ -26,42 +28,28 @@ const cupsSchema = z.array(
   }),
 );
 
-interface OrderDefault {
-  clientId?: string;
-  clientLabel?: string;
-  observations?: string;
-  isDelivery?: boolean;
-  discount?: number;
-  shippingPrice?: number;
-  addressId?: string;
-  addressLabel?: string;
-  cups?: z.infer<typeof cupsSchema>;
-  status?: "rascunho" | "confirmar_pedido" | "anotado" | "cancelado";
-  total?: number;
-}
-
-export const useUrlState = (data?: OrderDefault) => {
+export const useUrlState = () => {
   const [order, setState] = useQueryStates({
-    clientId: parseAsString.withDefault(data?.clientId ?? ""),
-    clientLabel: parseAsString.withDefault(data?.clientLabel ?? "Selecionar"),
-    observations: parseAsString.withDefault(data?.observations ?? ""),
-    isDelivery: parseAsBoolean.withDefault(data?.isDelivery ?? false),
-    discount: parseAsInteger.withDefault(data?.discount ?? 0),
-    shippingPrice: parseAsInteger.withDefault(data?.shippingPrice ?? 0),
-    addressId: parseAsString.withDefault(data?.addressId ?? ""),
-    addressLabel: parseAsString.withDefault(data?.addressLabel ?? "Endereço"),
-    cups: parseAsJson(cupsSchema.parse).withDefault(data?.cups ?? []),
+    clientId: parseAsString.withDefault(""),
+    clientLabel: parseAsString.withDefault("Selecionar"),
+    observations: parseAsString.withDefault(""),
+    isDelivery: parseAsBoolean.withDefault(false),
+    discount: parseAsInteger.withDefault(0),
+    shippingPrice: parseAsInteger.withDefault(0),
+    addressId: parseAsString.withDefault(""),
+    addressLabel: parseAsString.withDefault("Endereço"),
+    cups: parseAsJson(cupsSchema.parse).withDefault([]),
     status: parseAsStringEnum([
       "rascunho",
       "confirmar_pedido",
       "anotado",
       "cancelado",
-    ] as const).withDefault(data?.status ?? "rascunho"),
+    ] as const).withDefault("rascunho"),
   });
 
   const [totalState, setTotal] = useQueryState(
     "total",
-    parseAsInteger.withDefault(data?.total ?? 0),
+    parseAsInteger.withDefault(0),
   );
 
   type Order = typeof order;
@@ -234,6 +222,10 @@ export const useUrlState = (data?: OrderDefault) => {
     });
   };
 
+  const clearAll = () => {
+    setState(null);
+    setTotal(null);
+  };
   return {
     order: { ...order, total: totalState },
     setOrder,
@@ -243,5 +235,6 @@ export const useUrlState = (data?: OrderDefault) => {
     addAdditional,
     removeAdditional,
     setAdditional,
+    clearAll,
   };
 };
