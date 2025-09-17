@@ -13,7 +13,6 @@ export const useQuery = () => {
     mutationFn: async (data: { code: string; phone: string }) => {
       const response = await api.post("/verify-code", data);
 
-      console.log(response.data);
       return response.data;
     },
 

@@ -25,7 +25,8 @@ export const useQuery = () => {
           return;
         }
 
-        toast.error(JSON.stringify(err.response?.data.message));
+        console.log(err.response?.data);
+        toast.error(err.response?.data.message);
         return;
       }
 
