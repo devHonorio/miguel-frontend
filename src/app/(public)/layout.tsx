@@ -1,5 +1,5 @@
 import { LayoutProps } from "@/app/layout";
-import logo from "@/../public/icon.png";
+import logo from "@/../public/logo.png";
 import Image from "next/image";
 
 import { Navigation } from "@/components/navigation";
