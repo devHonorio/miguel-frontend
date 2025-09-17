@@ -21,6 +21,7 @@ import {
   CirclePlus,
   Loader2,
   MoreHorizontal,
+  Printer,
   Search,
   SquarePen,
   Trash2,
@@ -81,6 +82,29 @@ const StatusComponents = {
   anotado: <Badge className="bg-secondary text-black">Anotado</Badge>,
   cancelado: <Badge className="bg-red-500">Cancelado</Badge>,
 };
+
+export interface ResponseOrder {
+  address_id: string;
+  address_label: string;
+  client_id: string;
+  client_label: string;
+  phone: string;
+  discount: number;
+  is_delivery: boolean;
+  observations: string;
+  shipping_price: number;
+  status: CreateOrderType["status"];
+  total_price: number;
+  cups: {
+    additional: { id: string; price: number; label: string }[];
+    id: string;
+    label: string;
+    price: number;
+    cup_id: string;
+    quantity_additional: number;
+    total_price: number;
+  }[];
+}
 
 export default function Orders() {
   const { clearAll } = useUrlState();
@@ -159,27 +183,7 @@ export default function Orders() {
     mutationFn: async (orderId: string) => {
       const response = await api.get(`/orders/${orderId}`);
 
-      return response.data as {
-        address_id: string;
-        address_label: string;
-        client_id: string;
-        client_label: string;
-        discount: number;
-        is_delivery: boolean;
-        observations: string;
-        shipping_price: number;
-        status: CreateOrderType["status"];
-        total_price: number;
-        cups: {
-          additional: [];
-          id: string;
-          label: string;
-          price: number;
-          cup_id: string;
-          quantity_additional: number;
-          total_price: number;
-        }[];
-      };
+      return response.data as ResponseOrder;
     },
 
     onSuccess(orderData, orderId) {
@@ -344,6 +348,12 @@ export default function Orders() {
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent>
+                      <Link href={`/admin/orders/print/${id}`}>
+                        <DropdownMenuItem>
+                          Imprimir <Printer className="h-4 w-4" />
+                        </DropdownMenuItem>
+                      </Link>
+
                       <Link href={`?modalEdit=true&orderId=${id}`}>
                         <DropdownMenuItem onClick={() => mutateOrder(id)}>
                           Editar <SquarePen className="h-4 w-4" />
