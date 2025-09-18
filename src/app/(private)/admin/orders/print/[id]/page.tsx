@@ -34,7 +34,7 @@ export default function Print() {
   const [showButtons, setShowButtons] = useState(true);
 
   return (
-    <div className="absolute top-0 right-0 left-0 flex min-h-svh flex-col items-center bg-white">
+    <div className="absolute top-0 right-0 left-0 flex min-h-svh flex-col items-center bg-white text-sm">
       {showButtons && (
         <div className="space-x-2 py-2">
           <Button variant="outline" onClick={() => back()}>
@@ -60,11 +60,11 @@ export default function Print() {
       {isLoading && <Loader2 className="animate-spin" />}
       {!isLoading && (
         <div
-          className={`flex w-full max-w-xs flex-col gap-5 p-1 ${courierPrime.className}`}
+          className={`flex w-full max-w-xs flex-col gap-10 p-1 ${courierPrime.className}`}
         >
-          <div className="capitalize">{data?.client_label}</div>
-          <div className="-mt-5">
-            {User.phoneMask(data!.phone.slice(2, 13))}
+          <div>
+            <div className="capitalize">{data?.client_label}</div>
+            <div>{User.phoneMask(data!.phone.slice(2, 13))}</div>
           </div>
           <div>
             {data?.cups.map(({ label, additional, total_price }, i) => (
@@ -75,7 +75,6 @@ export default function Print() {
                 </div>
 
                 <Divider />
-
                 <div className="font-bold">{toCentsInBRL(total_price)}</div>
               </div>
             ))}
@@ -103,11 +102,12 @@ export default function Print() {
           {!data?.address_id && (
             <div className="font-bold">Retirada no local</div>
           )}
-
-          <Divider />
-          <div className="flex justify-between font-black">
-            <div>Total:</div>
-            <div className="">{toCentsInBRL(data?.total_price || 0)}</div>
+          <div>
+            <Divider />
+            <div className="flex justify-between font-black">
+              <div>Total:</div>
+              <div>{toCentsInBRL(data?.total_price || 0)}</div>
+            </div>
           </div>
         </div>
       )}
