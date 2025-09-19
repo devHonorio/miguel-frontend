@@ -66,16 +66,24 @@ export default function Print() {
             <div className="capitalize">{data?.client_label}</div>
             <div>{User.phoneMask(data!.phone.slice(2, 13))}</div>
           </div>
-          <div>
+          <div className="flex flex-col gap-5">
             {data?.cups.map(({ label, additional, total_price }, i) => (
-              <div key={i} className="flex items-baseline gap-1">
-                <div className="font-bold">{label}</div>
-                <div>
-                  {additional.map((additional) => additional.label).join(", ")}
+              <div key={i} className="flex flex-col">
+                <div className="flex items-baseline">
+                  <div className="font-bold">{label}</div>
+                  <Divider />
+                  <div className="font-bold">{toCentsInBRL(total_price)}</div>
                 </div>
-
-                <Divider />
-                <div className="font-bold">{toCentsInBRL(total_price)}</div>
+                <div>
+                  {additional.map((additional) => (
+                    <div
+                      key={additional.id}
+                      className="flex items-center gap-2"
+                    >
+                      <div>-</div> {additional.label}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
