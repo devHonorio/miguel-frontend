@@ -49,7 +49,10 @@ export const FormEdit = () => {
 
   const { mutate: createOrder, isPending: isPendingCreateOrder } = useMutation({
     mutationFn: async (data: CreateOrderType) => {
-      const response = await api.post("/orders", data);
+      const response = await api.patch("/orders", {
+        id: orderStates.orderId,
+        ...data,
+      });
 
       return response.data as ListOrders;
     },
@@ -62,12 +65,20 @@ export const FormEdit = () => {
       console.error(err);
     },
     onSuccess: (data) => {
-      const orders = queryClient.getQueryData([
+      let orders = queryClient.getQueryData([
         "orders",
         orderStates.search,
         orderStates.skip,
         orderStates.take,
       ]) as ListOrders[];
+
+      orders = orders.filter(({ id }) => id !== orderStates.orderId);
+
+      orders = [...orders, data].sort((a) => {
+        if (a.status === "confirmar_pedido") return -1;
+
+        return 0;
+      });
 
       queryClient.setQueriesData(
         {
@@ -78,12 +89,9 @@ export const FormEdit = () => {
             orderStates.take,
           ],
         },
-        [data, ...orders].sort((a) => {
-          if (a.status === "confirmar_pedido") return -1;
-
-          return 0;
-        }),
+        orders,
       );
+
       setOrderStates({ modalEdit: false });
       toast.success("Salvo com sucesso!");
     },
