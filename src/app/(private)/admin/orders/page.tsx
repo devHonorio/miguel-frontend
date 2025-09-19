@@ -202,9 +202,9 @@ export default function Orders() {
                 id,
                 additional,
                 label,
-                price,
+                price: total_price,
                 quantityAdditional: quantity_additional,
-                totalPrice: total_price,
+                priceCup: price,
               };
             },
           ),

@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { CreateOrderType } from "../../schema";
-import { api } from "@/app/(public)/services";
 import { AxiosError } from "axios";
 import { ListOrders } from "../../page";
 import { queryClient } from "@/providers/react-query";
@@ -26,6 +25,7 @@ import {
   useQueryStates,
 } from "nuqs";
 import { sleep500ms } from "@/app/utils/sleep500ms";
+import { useApi } from "@/hooks";
 
 export const FormCreate = () => {
   const [orderStates, setOrderStates] = useQueryStates({
@@ -50,7 +50,7 @@ export const FormCreate = () => {
   const { data: addresses, isLoading: isLoadingAddresses } = useSearchAddresses(
     orderStates.queryAddress,
   );
-
+  const { api } = useApi();
   const { mutate: createOrder, isPending: isPendingCreateOrder } = useMutation({
     mutationFn: async (data: CreateOrderType) => {
       const response = await api.post("/orders", data);
@@ -59,6 +59,7 @@ export const FormCreate = () => {
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
+        console.log(err.response?.data);
         return toast.error(err.response?.data.message);
       }
 

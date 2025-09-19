@@ -88,7 +88,7 @@ export const CupsForm = ({ control }: CupsFormProps) => {
                   className="font-black data-[error=true]:text-red-500"
                   data-error={!!errors.totalPrice?.message}
                 >
-                  Total {toCentsInBRL(order.cups[i].totalPrice)}
+                  Total {toCentsInBRL(order.cups[i].price)}
                 </p>
 
                 <MessageError control={control} name={`cups.${i}.price`} />

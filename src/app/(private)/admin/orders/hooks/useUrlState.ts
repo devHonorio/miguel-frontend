@@ -21,10 +21,10 @@ const cupsSchema = z.array(
         }),
       )
       .default([]),
-    price: z.coerce.number(),
+    priceCup: z.coerce.number(),
     label: z.string().default("Tamanho ml"),
     quantityAdditional: z.coerce.number(),
-    totalPrice: z.coerce.number(),
+    price: z.coerce.number(),
   }),
 );
 
@@ -64,7 +64,7 @@ export const useUrlState = () => {
     shippingPrice,
     cups,
   }: CalculateTotalOrderType) => {
-    const priceCups = cups.reduce((acc, cup) => acc + cup.totalPrice, 0);
+    const priceCups = cups.reduce((acc, cup) => acc + cup.price, 0);
 
     setTotal(-discount + shippingPrice + priceCups);
   };
@@ -87,10 +87,10 @@ export const useUrlState = () => {
         {
           additional: [],
           id: "",
-          price: 0,
+          priceCup: 0,
           label: "Tamanho ml",
           quantityAdditional: 0,
-          totalPrice: 0,
+          price: 0,
         },
       ],
     }));
@@ -131,16 +131,16 @@ export const useUrlState = () => {
       currentCup = {
         ...currentCup,
         ...data,
-        price: cupPrice || currentCup.price,
+        priceCup: cupPrice || currentCup.priceCup,
       };
 
       const totalPrice = Cup.getTotalPrice({
         additional: currentCup.additional,
-        cupPrice: currentCup.price,
+        cupPrice: currentCup.priceCup,
         quantityAdditional: currentCup.quantityAdditional,
       });
 
-      currentCup.totalPrice = totalPrice;
+      currentCup.price = totalPrice;
       prev.cups[index] = currentCup;
 
       calculateTotalOrder({
@@ -171,12 +171,12 @@ export const useUrlState = () => {
       );
 
       const totalPrice = Cup.getTotalPrice({
-        cupPrice: prev.cups[cupIndex].price,
+        cupPrice: prev.cups[cupIndex].priceCup,
         quantityAdditional: prev.cups[cupIndex].quantityAdditional,
         additional: prev.cups[cupIndex].additional,
       });
 
-      prev.cups[cupIndex].totalPrice = totalPrice;
+      prev.cups[cupIndex].price = totalPrice;
 
       calculateTotalOrder({
         discount: prev.discount,
@@ -205,12 +205,12 @@ export const useUrlState = () => {
       };
 
       const totalPrice = Cup.getTotalPrice({
-        cupPrice: prev.cups[cupIndex].price,
+        cupPrice: prev.cups[cupIndex].priceCup,
         quantityAdditional: prev.cups[cupIndex].quantityAdditional,
         additional: prev.cups[cupIndex].additional,
       });
 
-      prev.cups[cupIndex].totalPrice = totalPrice;
+      prev.cups[cupIndex].price = totalPrice;
 
       calculateTotalOrder({
         discount: prev.discount,
