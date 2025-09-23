@@ -29,7 +29,8 @@ export const CustomSelect = ({
       }}
     >
       <SelectTrigger size={size}>
-        <SelectValue placeholder={errorMessage || labelProp} />
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+        {!errorMessage && <SelectValue placeholder={labelProp} />}
       </SelectTrigger>
 
       <SelectContent>

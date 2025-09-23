@@ -2,6 +2,7 @@
 import { CupStore, useOrderStore } from "@/app/store/order";
 import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 import { Button } from "@/components/ui/button";
+import { PAYMENT_METHOD } from "@/consts";
 import { useApi } from "@/hooks";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -9,6 +10,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 import { useParams, useRouter } from "next/navigation";
+import { parseAsString, parseAsStringEnum, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
 interface Order {
@@ -21,8 +23,21 @@ export interface OrderItem {
   additional_ids: string[];
 }
 
+const paymentMethod = {
+  pix: "pix",
+  credit: "cartão de crédito",
+  debit: "cartão de débito",
+  cash: "dinheiro",
+};
+
 export default function Confirmation() {
   const { id } = useParams<{ id: string }>();
+
+  const [meta] = useQueryStates({
+    hour: parseAsString.withDefault("00:00"),
+    change: parseAsString,
+    paymentMethod: parseAsStringEnum([...PAYMENT_METHOD]).withDefault("pix"),
+  });
 
   const { cups, clean } = useOrderStore();
 
@@ -56,7 +71,12 @@ export default function Confirmation() {
         address_id: id === "pick-up-local" ? undefined : id,
       };
 
-      const response = await api.post("/order", order);
+      const response = await api.post("/order", {
+        ...order,
+        hour: meta.hour,
+        paymentMethod: meta.paymentMethod,
+        change: meta.change ? meta.change : undefined,
+      });
 
       return response.data;
     },
@@ -75,12 +95,19 @@ export default function Confirmation() {
 
   return (
     <div className="flex w-full max-w-xl flex-col gap-3 px-10 pb-72">
-      <Link href="/address">
+      <Link
+        href={`/address?hour=${meta.hour}&paymentMethod=${meta.paymentMethod}&change=${meta.change}`}
+      >
         <Button variant="secondary">
           <ArrowLeft /> Voltar
         </Button>
       </Link>
       <div className="text-xl font-bold">Resumo do pedido: </div>
+
+      <div>
+        Às {meta.hour}, pagamento no {paymentMethod[meta.paymentMethod]}
+        {meta.change !== "undefined" && ` ,troco para ${meta.change}`}
+      </div>
 
       <div className="space-y-2">
         {cups.map(({ id, price, size, additional }) => (

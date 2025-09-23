@@ -6,14 +6,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronRight, Plus } from "lucide-react";
+import { ArrowLeft, ChevronRight, Plus } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { api } from "../services";
 import { ButtonDelete } from "./ButtonDelete";
 import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 
-export default async function Address() {
+interface AddressProps {
+  searchParams: Promise<{
+    hour: string;
+    paymentMethod: string;
+    change: string;
+  }>;
+}
+export default async function Address({ searchParams }: AddressProps) {
   const cookiesStore = await cookies();
 
   const token = cookiesStore.get("token")?.value;
@@ -28,12 +35,21 @@ export default async function Address() {
     shipping_price: number;
   }[];
 
+  const { hour, paymentMethod, change } = await searchParams;
+
   return (
-    <div className="flex flex-wrap content-start gap-5 px-5 py-5">
+    <div className="flex flex-col flex-wrap content-start gap-5 px-5 py-5">
+      <Link href="/orderDetails/hourAndChange">
+        <Button variant="secondary">
+          <ArrowLeft /> Voltar
+        </Button>
+      </Link>
       <Card className="h-min">
         <CardContent className="flex items-center gap-2">
           <p className="text-black/80 uppercase">Retirar no local</p>
-          <Link href={`/address/pick-up-local`}>
+          <Link
+            href={`/address/pick-up-local?hour=${hour}&paymentMethod=${paymentMethod}&change=${change}`}
+          >
             <Button variant="secondary" size="icon">
               <ChevronRight />
             </Button>
@@ -52,7 +68,9 @@ export default async function Address() {
             <div className="space-x-2">
               <ButtonDelete id={id} />
 
-              <Link href={`/address/${id}`}>
+              <Link
+                href={`/address/${id}?hour=${hour}&paymentMethod=${paymentMethod}&change=${change}`}
+              >
                 <Button variant="secondary" size="icon">
                   <ChevronRight />
                 </Button>

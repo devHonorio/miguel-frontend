@@ -67,7 +67,7 @@ export default function OrderDetails() {
         )}
         <div className="space-x-2">
           {!!cups.length && (
-            <Link href={token ? "/address" : "/login"}>
+            <Link href={token ? "/orderDetails/hourAndChange" : "/login"}>
               <Button variant="outline" size="lg">
                 Continuar
               </Button>
