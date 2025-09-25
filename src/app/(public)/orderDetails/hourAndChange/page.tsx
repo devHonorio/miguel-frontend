@@ -37,22 +37,22 @@ const schema = z
         {
           message: "Pedidos apenas entre as 14:00 e 18:00",
         },
-      )
-      .refine(
-        (time) => {
-          const [hour, minute] = time.split(":").map(Number);
-          const totalMinutes = hour * 60 + minute;
-
-          const now = new Date();
-
-          const nowMinutes = now.getHours() * 60 + now.getMinutes();
-
-          return totalMinutes >= nowMinutes;
-        },
-        {
-          message: "Hora deve ser maior ou igual que a hora atual.",
-        },
       ),
+    // .refine(
+    //   (time) => {
+    //     const [hour, minute] = time.split(":").map(Number);
+    //     const totalMinutes = hour * 60 + minute;
+
+    //     const now = new Date();
+
+    //     const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+    //     return totalMinutes >= nowMinutes;
+    //   },
+    //   {
+    //     message: "Hora deve ser maior ou igual que a hora atual.",
+    //   },
+    // )
     paymentMethod: z.enum(PAYMENT_METHOD, {
       errorMap: () => ({ message: "Forma de pagamento é obrigatória!" }),
     }),
@@ -67,7 +67,7 @@ const schema = z
     { path: ["change"], message: "Se não precisar de troco coloque R$ 00,00" },
   );
 
-type FormType = z.infer<typeof schema>;
+export type FormType = z.infer<typeof schema>;
 
 export default function HourAndChange() {
   const { cups } = useOrderStore();

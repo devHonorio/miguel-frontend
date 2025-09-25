@@ -10,6 +10,8 @@ import User from "@/entities/User";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Courier_Prime } from "next/font/google";
+import { PaymentMethod } from "../../components/form-create";
+import { cleanFormatBRLAndParseCents } from "@/app/utils/cleanFormatBRLAndParseCents";
 
 const courierPrime = Courier_Prime({
   weight: ["400", "700"],
@@ -32,6 +34,8 @@ export default function Print() {
   const { back } = useRouter();
 
   const [showButtons, setShowButtons] = useState(true);
+
+  const paid = data?.payments.reduce((acc, { value }) => value + acc, 0) ?? 0;
 
   return (
     <div className="absolute top-0 right-0 left-0 flex min-h-svh flex-col items-center bg-white text-sm">
@@ -110,11 +114,43 @@ export default function Print() {
           {!data?.address_id && (
             <div className="font-bold">Retirada no local</div>
           )}
+
+          <div className="border-2 border-black p-2 font-bold">
+            <div>Pagamento no {PaymentMethod[data!.payment_method]}</div>
+
+            {data?.payment_method === "cash" && (
+              <div>
+                {cleanFormatBRLAndParseCents(data.change) > 0 &&
+                  ` Levar ${toCentsInBRL(
+                    cleanFormatBRLAndParseCents(data.change) - data.total_price,
+                  )} em troco`}
+                {!cleanFormatBRLAndParseCents(data.change) &&
+                  "Não precisa troco"}
+              </div>
+            )}
+          </div>
           <div>
             <Divider />
             <div className="flex justify-between font-black">
               <div>Total:</div>
               <div>{toCentsInBRL(data?.total_price || 0)}</div>
+            </div>
+
+            <div className="my-5">
+              {data?.payments.map((payment) => (
+                <div key={payment.id} className="flex justify-between gap-2">
+                  <div>Pago {PaymentMethod[payment.paymentMethod]}:</div>
+
+                  <div>{new Date(payment.date).toLocaleDateString()}</div>
+                  <div>{toCentsInBRL(payment.value)}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-between border-2 border-black p-2 font-bold">
+              <div>Restante a pagar:</div>
+
+              {toCentsInBRL((data?.total_price ?? 0) - paid)}
             </div>
           </div>
         </div>

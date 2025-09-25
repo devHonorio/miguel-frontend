@@ -26,9 +26,15 @@ import { sleep500ms } from "@/app/utils/sleep500ms";
 import { CupsForm } from "../form-create/form-cups";
 import { useApi } from "@/hooks";
 import { ListOrders } from "../../page";
+import { PaymentMethod } from "../form-create";
+import { FormType } from "@/app/(public)/orderDetails/hourAndChange/page";
+import { PAYMENT_METHOD } from "@/consts";
+import { DatePicker } from "@/components/date-picker";
+import { Plus, XCircle } from "lucide-react";
 
 export const FormEdit = () => {
-  const { order, setOrder } = useUrlState();
+  const { order, setOrder, addPayment, setPayment, removePayment } =
+    useUrlState();
   const [orderStates, setOrderStates] = useQueryStates({
     modalEdit: parseAsBoolean.withDefault(false),
 
@@ -99,7 +105,7 @@ export const FormEdit = () => {
 
   const { api } = useApi();
 
-  const { control, handleSubmit, errors } = useFormCreate({
+  const { control, handleSubmit, errors, clearErrors } = useFormCreate({
     ...order,
     totalPrice: order.total,
     discount: order.discount,
@@ -131,6 +137,12 @@ export const FormEdit = () => {
           setOrder({ clientId: value, clientLabel: label });
         }}
         errorMessage={errors.clientId?.message}
+      />
+
+      <Input
+        type="time"
+        value={order.hour}
+        onChange={(e) => setOrder({ hour: e.target.value })}
       />
 
       <CupsForm control={control} />
@@ -235,6 +247,98 @@ export const FormEdit = () => {
           setOrder({ status: val as CreateOrderType["status"] })
         }
       />
+
+      <div className="space-y-2">
+        <div>Forma de pagamento e troco</div>
+        <div className="flex gap-2">
+          <Select
+            label={PaymentMethod[order.paymentMethod]}
+            data={[
+              { label: "Pix", value: "pix" },
+              { label: "Cartão de crédito", value: "credit" },
+              { label: "Cartão de débito", value: "debit" },
+              { label: "Dinheiro", value: "cash" },
+            ]}
+            onSelect={(paymentMethod) => {
+              setOrder({
+                paymentMethod: paymentMethod as FormType["paymentMethod"],
+              });
+              clearErrors("paymentMethod");
+            }}
+            errorMessage={errors.paymentMethod?.message}
+          />
+          {order.paymentMethod === "cash" && (
+            <Input
+              placeholder="Troco"
+              onChange={(e) => {
+                const value = cleanFormatBRLAndParseCents(e.target.value);
+                setOrder({ change: toCentsInBRL(+value) });
+              }}
+              error={errors.change?.message}
+              value={order.change}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <div>Pagamentos efetuados</div>
+        {order.payments.map(({ value, paymentMethod, date, id }, i) => {
+          return (
+            <div key={id} className="flex items-center gap-2">
+              <Input
+                value={toCentsInBRL(value)}
+                onChange={(e) => {
+                  setPayment(i, {
+                    value: cleanFormatBRLAndParseCents(e.target.value),
+                  });
+                  e.currentTarget.focus();
+                }}
+                onClick={(e) => e.currentTarget.select()}
+                className="min-w-fit"
+              />
+              <Select
+                data={PAYMENT_METHOD.map((method) => ({
+                  value: method,
+                  label: PaymentMethod[method],
+                }))}
+                label={PaymentMethod[paymentMethod]}
+                onSelect={(value) => {
+                  setPayment(i, {
+                    paymentMethod: value as keyof typeof PaymentMethod,
+                  });
+                }}
+              />
+
+              <DatePicker
+                min
+                value={date}
+                onSelect={(currentDate) => setPayment(i, { date: currentDate })}
+              />
+
+              <Button
+                size="icon"
+                variant="ghost"
+                className="text-red-600"
+                type="button"
+                onClick={() => removePayment(i)}
+              >
+                <XCircle />
+              </Button>
+            </div>
+          );
+        })}
+
+        <Button
+          type="button"
+          variant="ghost"
+          className="border border-dashed border-black/50 text-black/50"
+          onClick={addPayment}
+        >
+          Adicionar pagamento
+          <Plus />
+        </Button>
+      </div>
       <Button isLoading={isPendingCreateOrder}>Salvar</Button>
     </form>
   );

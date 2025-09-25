@@ -1,3 +1,4 @@
+import { PAYMENT_METHOD } from "@/consts";
 import z from "zod";
 
 export const cups = z.object({
@@ -18,6 +19,18 @@ export const cups = z.object({
   }),
   priceTemplate: z.string().optional(),
 });
+
+export const payment = z.object({
+  id: z.string().default(""),
+  value: z.coerce
+    .number({ errorMap: () => ({ message: "Valor é obrigatório." }) })
+    .int()
+    .min(0, "O valor deve ser maior que R$ 00,00")
+    .default(0),
+  paymentMethod: z.enum(PAYMENT_METHOD).default("pix"),
+  date: z.coerce.date().default(new Date()),
+});
+
 export const createOrderSchemaBase = z
   .object({
     clientId: z
@@ -41,6 +54,10 @@ export const createOrderSchemaBase = z
       .number({ errorMap: () => ({ message: "Preço é obrigatório." }) })
       .min(1, "Preço deve ser maior de R$ 1,00."),
     status: z.enum(["rascunho", "confirmar_pedido", "anotado", "cancelado"]),
+    hour: z.string({ errorMap: () => ({ message: "Hora é obrigatória" }) }),
+    payments: z.array(payment),
+    change: z.string().optional(),
+    paymentMethod: z.enum(PAYMENT_METHOD),
   })
   .refine(
     ({ isDelivery, shippingPrice }) => {

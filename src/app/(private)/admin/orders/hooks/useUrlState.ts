@@ -9,6 +9,8 @@ import {
   useQueryStates,
 } from "nuqs";
 import { z } from "zod";
+import { payment } from "../schema";
+import { PAYMENT_METHOD } from "@/consts";
 const cupsSchema = z.array(
   z.object({
     id: z.string(),
@@ -45,6 +47,10 @@ export const useUrlState = () => {
       "anotado",
       "cancelado",
     ] as const).withDefault("rascunho"),
+    hour: parseAsString.withDefault("00:00"),
+    change: parseAsString.withDefault("R$ 00,00"),
+    paymentMethod: parseAsStringEnum([...PAYMENT_METHOD]).withDefault("pix"),
+    payments: parseAsJson(z.array(payment).parse).withDefault([]),
   });
 
   const [totalState, setTotal] = useQueryState(
@@ -226,6 +232,52 @@ export const useUrlState = () => {
     setState(null);
     setTotal(null);
   };
+
+  const addPayment = () => {
+    setState((prev) => ({
+      payments: [
+        ...prev.payments,
+        {
+          id: crypto.randomUUID(),
+          date: new Date(),
+          paymentMethod: "pix",
+          value: 0,
+        },
+      ],
+    }));
+  };
+
+  const removePayment = (index: number) => {
+    setState((prev) => {
+      const payments = prev.payments.filter((_, i) => index !== i);
+
+      prev.payments = payments;
+
+      return prev;
+    });
+  };
+
+  const setPayment = (
+    index: number,
+    data: {
+      value?: number;
+      paymentMethod?: z.infer<typeof payment>["paymentMethod"];
+      date?: Date;
+    },
+  ) => {
+    setState((prev) => {
+      let currentPayment = prev.payments[index];
+
+      currentPayment = {
+        ...currentPayment,
+        ...data,
+      };
+
+      prev.payments[index] = currentPayment;
+
+      return prev;
+    });
+  };
   return {
     order: { ...order, total: totalState },
     setOrder,
@@ -236,5 +288,8 @@ export const useUrlState = () => {
     removeAdditional,
     setAdditional,
     clearAll,
+    addPayment,
+    removePayment,
+    setPayment,
   };
 };

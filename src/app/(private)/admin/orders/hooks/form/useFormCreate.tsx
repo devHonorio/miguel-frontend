@@ -8,6 +8,7 @@ export const useFormCreate = (order: CreateOrderType) => {
     handleSubmit,
     control,
     formState: { errors },
+    clearErrors,
   } = useForm({
     resolver: zodResolver(createOrderSchema),
     values: order,
@@ -18,5 +19,6 @@ export const useFormCreate = (order: CreateOrderType) => {
     handleSubmit,
     errors,
     control,
+    clearErrors,
   };
 };

@@ -104,6 +104,10 @@ export interface ResponseOrder {
     quantity_additional: number;
     total_price: number;
   }[];
+  hour: string;
+  payment_method: CreateOrderType["paymentMethod"];
+  change: string;
+  payments: CreateOrderType["payments"];
 }
 
 export default function Orders() {
@@ -208,7 +212,7 @@ export default function Orders() {
               };
             },
           ),
-        )}&total=${orderData.total_price}&modalEdit=true&orderId=${orderId}`,
+        )}&total=${orderData.total_price}&modalEdit=true&orderId=${orderId}&hour=${orderData.hour}&change=${orderData.change}&paymentMethod=${orderData.payment_method}&payments=${JSON.stringify(orderData.payments)}`,
       );
     },
   });
