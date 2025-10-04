@@ -6,6 +6,7 @@ import { queryClient } from "@/providers/react-query";
 import { parseAsBoolean, parseAsString, useQueryStates } from "nuqs";
 import { AdditionalType } from "../schema";
 import { deleteAdditional } from "@/app/services/additional/deleteAdditional";
+import { revalidateAdditional } from "@/app/actions/revalidate-additional";
 
 export const useDelete = () => {
   const [, setAdditionalStates] = useQueryStates({
@@ -27,6 +28,7 @@ export const useDelete = () => {
       );
 
       setAdditionalStates({ ideDelete: "", modalAlertDelete: false });
+      revalidateAdditional();
     },
 
     onError: (err) => {

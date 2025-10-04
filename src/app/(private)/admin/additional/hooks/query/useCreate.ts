@@ -5,6 +5,7 @@ import { parseAsBoolean, useQueryStates } from "nuqs";
 import { queryClient } from "@/providers/react-query";
 import { Additional } from "./useList";
 import { postAdditional } from "@/app/services/additional/postAdditional";
+import { revalidateAdditional } from "@/app/actions/revalidate-additional";
 
 export const useCreate = () => {
   const [, setAdditionalStates] = useQueryStates({
@@ -33,6 +34,7 @@ export const useCreate = () => {
       additional.push(data);
 
       queryClient.setQueryData(["additional"], additional);
+      revalidateAdditional();
     },
   });
 

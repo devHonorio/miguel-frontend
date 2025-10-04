@@ -10,8 +10,19 @@ interface CupProps {
 
 const getCup = async (id: string) =>
   await api.get<CupUpdateType>(`/cups/${id}`);
-const getAdditional = async () =>
-  await api.get<AdditionalType[]>("/additional");
+
+const getAdditional = async () => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/additional`,
+    {
+      next: { tags: ["additional"] },
+    },
+  );
+
+  const additional = (await response.json()) as AdditionalType[];
+  return additional;
+};
+
 export default async function Cup({ params }: CupProps) {
   const { id } = await params;
 
@@ -19,7 +30,7 @@ export default async function Cup({ params }: CupProps) {
 
   const cup = response[0].data;
 
-  const additional = response[1].data;
+  const additional = response[1];
 
   return (
     <div className="bg-primary/5 flex w-full flex-col items-center gap-5 p-5">
@@ -33,4 +44,16 @@ export default async function Cup({ params }: CupProps) {
       />
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/cups`, {
+    next: { tags: ["cups-id"] },
+  });
+
+  const cups = (await response.json()) as { id: string }[];
+
+  return cups.map(({ id }) => ({
+    id,
+  }));
 }

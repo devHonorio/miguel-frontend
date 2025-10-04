@@ -7,6 +7,7 @@ import { queryClient } from "@/providers/react-query";
 import { Additional } from "./useList";
 import { patchAdditional } from "@/app/services/additional/patchAdditional";
 import { getAdditional } from "@/app/services/additional/getAdditional";
+import { revalidateAdditional } from "@/app/actions/revalidate-additional";
 
 export const useUpdate = (id: string) => {
   const [, setAdditionalStates] = useQueryStates({
@@ -40,6 +41,7 @@ export const useUpdate = (id: string) => {
       additional.sort((a, b) => a.name.localeCompare(b.name));
 
       queryClient.setQueryData(["additional"], additional);
+      revalidateAdditional();
     },
   });
 
