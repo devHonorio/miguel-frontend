@@ -1,18 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { useApi } from "@/hooks";
 import { CupUpdateType } from "../../schema";
+import { getCups } from "@/app/services/cups/getCups";
 
 export const useGet = () => {
-  const { api } = useApi();
-
   const { data, isPending } = useQuery<CupUpdateType[]>({
     queryKey: ["cups"],
-    queryFn: async () => {
-      const res = await api.get("/cups");
-
-      return res.data;
-    },
+    queryFn: getCups,
   });
 
   return { data, isPending };

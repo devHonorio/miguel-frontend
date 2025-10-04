@@ -7,8 +7,8 @@ import { Loader2, Plus, XCircle } from "lucide-react";
 import { useUrlState } from "../../hooks/useUrlState";
 import { useQuery } from "@tanstack/react-query";
 import { Additional } from "../../../additional/hooks/query/useList";
-import { useApi } from "@/hooks";
 import { toCentsInBRL } from "@/app/utils/toCentInBRL";
+import { getAllAdditional } from "@/app/services/additional/getAllAdditional";
 
 interface AdditionalFormProps {
   index: number;
@@ -16,18 +16,13 @@ interface AdditionalFormProps {
 }
 
 export const AdditionalForm = ({ index }: AdditionalFormProps) => {
-  const { api } = useApi();
-
   const { order, addAdditional, removeAdditional, setAdditional } =
     useUrlState();
 
   const { data, isLoading } = useQuery<Additional[]>({
     queryKey: ["additional"],
-    queryFn: async () => {
-      const response = await api.get("/additional");
-
-      return response.data;
-    },
+    queryFn: getAllAdditional,
+    initialData: [],
   });
 
   const currentCup = order.cups[index];

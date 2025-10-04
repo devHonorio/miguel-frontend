@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useApi } from "@/hooks";
 import { queryClient } from "@/providers/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -11,10 +10,10 @@ import {
 } from "nuqs";
 import { CreateAddressType } from "../../schema";
 import { AddressResponse } from "./useGet";
+import { getAddress } from "@/app/services/addresses/getAddress";
+import { patchAddresses } from "@/app/services/addresses/patchAddresses";
 
 export const useUpdate = (id: string) => {
-  const { api } = useApi();
-
   const [{ take, page, query }, setOrderStates] = useQueryStates({
     modalUpdate: parseAsBoolean.withDefault(false),
 
@@ -27,15 +26,13 @@ export const useUpdate = (id: string) => {
     queryKey: ["addresses", id],
 
     queryFn: async () => {
-      const response = await api.get(`addresses/${id}`);
-      return response.data;
+      return await getAddress(id);
     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: CreateAddressType) => {
-      const response = await api.patch(`/addresses/${id}`, data);
-      return response.data as AddressResponse;
+      return (await patchAddresses({ id, ...data })) as AddressResponse;
     },
 
     onSuccess: (data) => {

@@ -3,22 +3,18 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { queryClient } from "@/providers/react-query";
-import { useApi } from "@/hooks";
 import { parseAsBoolean, parseAsString, useQueryStates } from "nuqs";
 import { AdditionalType } from "../schema";
+import { deleteAdditional } from "@/app/services/additional/deleteAdditional";
 
 export const useDelete = () => {
-  const { api } = useApi();
-
   const [, setAdditionalStates] = useQueryStates({
     modalAlertDelete: parseAsBoolean.withDefault(true),
     ideDelete: parseAsString.withDefault(""),
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (id: string) => {
-      await api.delete(`/additional/${id}`);
-    },
+    mutationFn: deleteAdditional,
 
     onSuccess: (_, id) => {
       toast.success("Adicional apagado!!");

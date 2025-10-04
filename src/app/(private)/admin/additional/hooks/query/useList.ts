@@ -1,20 +1,16 @@
-import { useApi } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { AdditionalType } from "../schema";
+import { getAllAdditional } from "@/app/services/additional/getAllAdditional";
 
 export interface Additional extends Omit<AdditionalType, "priceTemplate"> {
   id: string;
 }
 
 export const useList = () => {
-  const { api } = useApi();
-
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<Additional[]>({
     queryKey: ["additional"],
-    queryFn: async () => {
-      const response = await api.get<Additional[]>("additional");
-      return response.data;
-    },
+    queryFn: getAllAdditional,
+    initialData: [],
   });
   return { data, isLoading };
 };

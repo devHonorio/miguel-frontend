@@ -3,18 +3,14 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { queryClient } from "@/providers/react-query";
-import { useApi } from "@/hooks";
 import { AddressResponse } from "./useGet";
 import { useStates } from "./useStates";
+import { deleteAddresses } from "@/app/services/addresses/deleteAddresses";
 
 export const useDelete = () => {
-  const { api } = useApi();
-
   const { page, take, query, setAddressStates } = useStates();
   const { mutate, isPending } = useMutation({
-    mutationFn: async (id: string) => {
-      await api.delete(`/addresses/${id}`);
-    },
+    mutationFn: deleteAddresses,
 
     onSuccess: (_, id) => {
       toast.success("Endereço apagado!");

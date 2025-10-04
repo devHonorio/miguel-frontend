@@ -1,22 +1,16 @@
 "use client";
 
 import { revalidateAddress } from "@/app/actions";
+import { deleteUserAddresses } from "@/app/services/addresses/deleteUserAddresses";
 import { Button } from "@/components/ui/button";
-import { useApi } from "@/hooks";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export const ButtonDelete = ({ id }: { id: string }) => {
-  const { api } = useApi();
-
   const { mutate } = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await api.delete(`/address/user/${id}`);
-
-      return response.data;
-    },
+    mutationFn: deleteUserAddresses,
 
     onError: (error) => {
       if (error instanceof AxiosError) {

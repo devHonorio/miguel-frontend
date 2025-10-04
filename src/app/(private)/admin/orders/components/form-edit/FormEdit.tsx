@@ -24,13 +24,13 @@ import {
 } from "nuqs";
 import { sleep500ms } from "@/app/utils/sleep500ms";
 import { CupsForm } from "../form-create/form-cups";
-import { useApi } from "@/hooks";
 import { ListOrders } from "../../page";
 import { PaymentMethod } from "../form-create";
 import { FormType } from "@/app/(public)/orderDetails/hourAndChange/page";
 import { PAYMENT_METHOD } from "@/consts";
 import { DatePicker } from "@/components/date-picker";
 import { Plus, XCircle } from "lucide-react";
+import { patchOrder } from "@/app/services/orders/patchOrder";
 
 export const FormEdit = () => {
   const { order, setOrder, addPayment, setPayment, removePayment } =
@@ -55,12 +55,10 @@ export const FormEdit = () => {
 
   const { mutate: createOrder, isPending: isPendingCreateOrder } = useMutation({
     mutationFn: async (data: CreateOrderType) => {
-      const response = await api.patch("/orders", {
+      return (await patchOrder({
         id: orderStates.orderId,
         ...data,
-      });
-
-      return response.data as ListOrders;
+      })) as ListOrders;
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -102,8 +100,6 @@ export const FormEdit = () => {
       toast.success("Salvo com sucesso!");
     },
   });
-
-  const { api } = useApi();
 
   const { control, handleSubmit, errors, clearErrors } = useFormCreate({
     ...order,

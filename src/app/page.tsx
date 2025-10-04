@@ -1,16 +1,14 @@
 import { verifyIsAdmin } from "@/middleware";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getToken } from "./services/auth/getToken";
 
 export default async function Home() {
-  const cookiesStore = await cookies();
-
-  const token = cookiesStore.get("token")?.value;
+  const token = await getToken();
 
   if (token) {
     const isAdmin = await verifyIsAdmin(token);
 
-    if (isAdmin) redirect("/admin/cups");
+    if (isAdmin) redirect("/admin/orders");
   }
   redirect("/catalogo");
 }

@@ -1,57 +1,31 @@
-"use client";
+"use server";
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { deleteCookie, getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { LogIn, LogOut } from "lucide-react";
+import { LogIn } from "lucide-react";
+import { getToken } from "@/app/services/auth/getToken";
+import { SignOutButton } from "./signout";
 
-interface AuthButtonProps {
+export interface AuthButtonProps {
+  hidden?: boolean;
   className?: string;
   size?: "default" | "sm" | "lg" | "icon";
 }
 
-export const AuthButton = ({
+export const AuthButton = async ({
+  hidden,
   className,
   size = "default",
 }: AuthButtonProps) => {
-  const pathName = usePathname();
+  if (hidden) return;
 
-  const [login, setLogin] = useState(false);
-
-  useEffect(() => {
-    const main = async () => {
-      const token = await getCookie("token");
-      setLogin(!!token);
-    };
-
-    main();
-  }, []);
-
-  const { push } = useRouter();
-
-  if (pathName === "/login") {
-    return;
-  }
+  const token = await getToken();
 
   return (
     <>
-      {login && (
-        <Button
-          size={size}
-          variant="destructive"
-          onClick={async () => {
-            await deleteCookie("token");
-            push("/login");
-          }}
-          className={className}
-        >
-          <LogOut /> Sair
-        </Button>
-      )}
+      {!!token && <SignOutButton />}
 
-      {!login && (
+      {!token && (
         <Link href="/login">
           <Button size={size} variant="secondary" className={className}>
             <LogIn /> Logar

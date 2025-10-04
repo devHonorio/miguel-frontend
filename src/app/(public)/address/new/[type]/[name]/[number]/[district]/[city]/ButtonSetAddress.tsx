@@ -1,5 +1,6 @@
-import { useApi } from "@/hooks";
+import { setAddress } from "@/app/services/address/setAddress";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -15,17 +16,14 @@ export const ButtonSetAddress = ({
   index,
   complement,
 }: ButtonSetAddressProps) => {
-  const { api } = useApi();
-
   const { push } = useRouter();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const response = await api.post(`/address/user/${id}`);
-
-      return response.data;
-    },
-    onError: () => {
+    mutationFn: setAddress,
+    onError: (err) => {
+      console.log(err);
+      if (err instanceof AxiosError) {
+      }
       toast.error("Erro ao adicionar endereço.");
     },
 
@@ -40,7 +38,7 @@ export const ButtonSetAddress = ({
       key={id}
       className="flex gap-2 rounded-md bg-black/5 px-4 py-2"
       onClick={() => {
-        mutate();
+        mutate(id);
       }}
     >
       <div>{index + 1} - </div>

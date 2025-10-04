@@ -1,6 +1,5 @@
+import { getAddresses } from "@/app/services/addresses/getAddresses";
 import { useQuery } from "@tanstack/react-query";
-
-import { useApi } from "@/hooks";
 
 export interface AddressResponse {
   id: string;
@@ -8,16 +7,10 @@ export interface AddressResponse {
   shipping_price: number;
 }
 export const useGet = (take: number, page: number, query: string) => {
-  const { api } = useApi();
-
   const { data, isPending } = useQuery<AddressResponse[]>({
     queryKey: ["addresses", take, page, query],
     queryFn: async () => {
-      const res = await api.get(
-        `/addresses?take=${take}&page=${page}&query=${query}`,
-      );
-
-      return res.data;
+      return getAddresses(take, page, query);
     },
     initialData: [],
   });

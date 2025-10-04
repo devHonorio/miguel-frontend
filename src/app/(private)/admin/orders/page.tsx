@@ -39,7 +39,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 import { Badge } from "@/components/ui/badge";
 
-import { useApi } from "@/hooks";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -66,6 +65,9 @@ import { FormEdit } from "./components/form-edit";
 import { useRouter } from "next/navigation";
 import { useUrlState } from "./hooks/useUrlState";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getOrders } from "@/app/services/orders/getOrders";
+import { getOrder } from "@/app/services/orders/getOrder";
+import { deleteOrder } from "@/app/services/orders/deleteOrder";
 
 export interface ListOrders {
   id: string;
@@ -125,9 +127,8 @@ export default function Orders() {
 
     modalEdit: parseAsBoolean.withDefault(false),
   });
-  const { api } = useApi();
 
-  const { data, isLoading, isFetching } = useQuery<ListOrders[]>({
+  const { data, isLoading } = useQuery<ListOrders[]>({
     queryKey: [
       "orders",
       orderStates.search,
@@ -136,19 +137,17 @@ export default function Orders() {
     ],
     initialData: [],
     queryFn: async () => {
-      const response = await api.get(
-        `/orders?search=${orderStates.search}&take=${orderStates.take}&skip=${orderStates.skip}`,
+      return await getOrders(
+        orderStates.skip,
+        orderStates.take,
+        orderStates.search,
       );
-
-      return response.data;
     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (id: string) => {
-      const response = await api.delete(`/orders/${id}`);
-
-      return response.data as { id: string };
+      return (await deleteOrder(id)) as { id: string };
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -185,9 +184,7 @@ export default function Orders() {
   const { push } = useRouter();
   const { mutate: mutateOrder, isPending: isPendingOrder } = useMutation({
     mutationFn: async (orderId: string) => {
-      const response = await api.get(`/orders/${orderId}`);
-
-      return response.data as ResponseOrder;
+      return (await getOrder(orderId)) as ResponseOrder;
     },
 
     onSuccess(orderData, orderId) {
@@ -316,7 +313,7 @@ export default function Orders() {
         </DialogContent>
       </Dialog>
 
-      {!data.length && !isLoading && !isFetching && (
+      {!data.length && !isLoading && (
         <div className="mx-auto font-bold text-black/50">
           Nenhum pedido encontrado
         </div>
@@ -429,7 +426,7 @@ export default function Orders() {
           )}
         </div>
       )}
-      {(isFetching || isLoading) && <Loader2 className="animate-spin" />}
+      {isLoading && <Loader2 className="animate-spin" />}
     </>
   );
 }

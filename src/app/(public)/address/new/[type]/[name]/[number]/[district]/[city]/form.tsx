@@ -1,8 +1,8 @@
 "use client";
 
+import { postAddress } from "@/app/services/address/postAddress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useApi } from "@/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -25,7 +25,7 @@ const schema = z.object({
 
 type typeSchema = z.infer<typeof schema>;
 
-interface CreateAddress {
+export interface CreateAddress {
   street: string;
   number: number;
   district: string;
@@ -42,15 +42,9 @@ export const Form = ({ name, number, type, city, district }: FormProps) => {
     resolver: zodResolver(schema),
   });
 
-  const { api } = useApi();
-
   const { push } = useRouter();
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: CreateAddress) => {
-      const response = await api.post("/address", data);
-
-      return response.data;
-    },
+    mutationFn: postAddress,
     onSuccess: () => {
       push("/address");
       toast.success("Endereço criado");

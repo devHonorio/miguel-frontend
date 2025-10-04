@@ -1,15 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useApi } from "@/hooks";
 import { queryClient } from "@/providers/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { CupUpdateType } from "../../schema";
 import { revalidateCatalog } from "@/app/actions";
+import { getCup } from "@/app/services/cups/getCup";
+import { patchCups } from "@/app/services/cups/patchCups";
 
 export const useUpdate = (id: string) => {
-  const { api } = useApi();
-
   const [, setModalUpdate] = useQueryState(
     "modalUpdate",
     parseAsBoolean.withDefault(false),
@@ -19,16 +18,12 @@ export const useUpdate = (id: string) => {
     queryKey: ["cup"],
 
     queryFn: async () => {
-      const response = await api.get(`cups/${id}`);
-      return response.data;
+      return await getCup(id);
     },
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async ({ id, ...data }: CupUpdateType) => {
-      const response = await api.patch(`/cups/${id}`, data);
-      return response.data as CupUpdateType;
-    },
+    mutationFn: patchCups,
 
     onSuccess: (data) => {
       let cups = queryClient.getQueryData(["cups"]) as CupUpdateType[];

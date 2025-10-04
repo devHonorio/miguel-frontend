@@ -1,4 +1,3 @@
-import { useApi } from "@/hooks";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AdditionalType } from "../schema";
 import { AxiosError } from "axios";
@@ -6,24 +5,17 @@ import { toast } from "sonner";
 import { parseAsBoolean, parseAsString, useQueryStates } from "nuqs";
 import { queryClient } from "@/providers/react-query";
 import { Additional } from "./useList";
+import { patchAdditional } from "@/app/services/additional/patchAdditional";
+import { getAdditional } from "@/app/services/additional/getAdditional";
 
 export const useUpdate = (id: string) => {
-  const { api } = useApi();
-
   const [, setAdditionalStates] = useQueryStates({
     modalUpdate: parseAsBoolean.withDefault(false),
     idUpdate: parseAsString.withDefault(""),
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async ({
-      id,
-      ...data
-    }: Omit<AdditionalType, "priceTemplate">) => {
-      const response = await api.patch(`/additional/${id}`, data);
-
-      return response.data;
-    },
+    mutationFn: patchAdditional,
 
     onError: (error) => {
       console.error(error);
@@ -55,8 +47,7 @@ export const useUpdate = (id: string) => {
     queryKey: ["additional", id],
 
     queryFn: async () => {
-      const response = await api.get(`additional/${id}`);
-      return response.data;
+      return await getAdditional(id);
     },
   });
 

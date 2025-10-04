@@ -3,12 +3,12 @@ import Link from "next/link";
 import { Form } from "./form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { useApi } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { ButtonSetAddress } from "./ButtonSetAddress";
+import { getSearchAddresses } from "@/app/services/addresses/getSearchAddresses";
 
 interface Params extends ParsedUrlQuery {
   name: string;
@@ -19,8 +19,6 @@ interface Params extends ParsedUrlQuery {
 }
 
 export default function Complement() {
-  const { api } = useApi();
-
   const params = useParams<Params>();
 
   const { type, name, number, city, district } = params;
@@ -39,11 +37,9 @@ export default function Complement() {
   >({
     queryKey: ["complements"],
     queryFn: async () => {
-      const response = await api.get(
-        `/address/search/${typeDecode} ${nameDecode} - ${number}, ${districtDecode}, ${cityDecode}`,
+      return await getSearchAddresses(
+        `${typeDecode} ${nameDecode} - ${number}, ${districtDecode}, ${cityDecode}`,
       );
-
-      return response.data;
     },
     initialData: [],
   });

@@ -1,23 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useApi } from "@/hooks";
 import { queryClient } from "@/providers/react-query";
-import { CreateAddressType } from "../../schema";
 import { AddressResponse } from "./useGet";
 import { useStates } from "./useStates";
+import { postAddresses } from "@/app/services/addresses/postAddresses";
 
 export const useCreate = () => {
-  const { api } = useApi();
-
   const { take, page, query, setAddressStates } = useStates();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: CreateAddressType) => {
-      const response = await api.post("/addresses", data);
-
-      return response.data;
-    },
+    mutationFn: postAddresses,
 
     onSuccess: ({ id, address, shipping_price }: AddressResponse) => {
       const addresses = queryClient.getQueryData([

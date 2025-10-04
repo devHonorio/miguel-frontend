@@ -3,13 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { queryClient } from "@/providers/react-query";
-import { useApi } from "@/hooks";
 import { revalidateCatalog } from "@/app/actions";
 import { parseAsBoolean, parseAsInteger, useQueryStates } from "nuqs";
+import { deleteCups } from "@/app/services/cups/deleteCups";
 
 export const useDelete = () => {
-  const { api } = useApi();
-
   const [, setCupStates] = useQueryStates({
     modalAlertDelete: parseAsBoolean,
     sizeDelete: parseAsInteger,
@@ -17,7 +15,7 @@ export const useDelete = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (size: number) => {
-      await api.delete(`/cups/${size}`);
+      await deleteCups(size);
     },
 
     onSuccess: (_, size) => {

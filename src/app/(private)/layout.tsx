@@ -1,9 +1,7 @@
-"use client";
 import { LayoutProps } from "@/app/layout";
 import logo from "@/../public/logo.png";
 import Image from "next/image";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Cherry,
@@ -13,7 +11,6 @@ import {
   Menu,
   NotebookTabs,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -22,6 +19,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AuthButton } from "@/components/auth-button";
+import { PathButton } from "./pathButton";
 
 const paths = [
   { path: "/admin/orders", name: "Pedidos", icon: <NotebookTabs /> },
@@ -32,7 +30,6 @@ const paths = [
 ];
 
 export default function PublicLayout({ children }: LayoutProps) {
-  const pathName = usePathname();
   return (
     <div className="md:bg-primary/5 mx-auto flex w-4/5 flex-1 flex-col md:w-full md:flex-row">
       <header className="flex justify-between py-5 md:flex-col md:gap-5 md:p-5">
@@ -53,15 +50,7 @@ export default function PublicLayout({ children }: LayoutProps) {
             <div className="flex flex-1 flex-col justify-between px-5 pb-5">
               <div>
                 {paths.map(({ path, name, icon }) => (
-                  <Link href={path} key={path}>
-                    <Button
-                      className="flex w-full items-center justify-start"
-                      variant={pathName === path ? "secondary" : "ghost"}
-                      size="lg"
-                    >
-                      {icon} {name}
-                    </Button>
-                  </Link>
+                  <PathButton icon={icon} name={name} path={path} key={path} />
                 ))}
               </div>
               <AuthButton className="flex w-full justify-start" size="lg" />
@@ -72,15 +61,7 @@ export default function PublicLayout({ children }: LayoutProps) {
         <div className="hidden w-44 flex-1 flex-col justify-between md:flex">
           <div>
             {paths.map(({ path, name, icon }) => (
-              <Link href={path} key={path}>
-                <Button
-                  className="flex w-full items-center justify-start"
-                  variant={pathName === path ? "secondary" : "ghost"}
-                  size="lg"
-                >
-                  {icon} {name}
-                </Button>
-              </Link>
+              <PathButton icon={icon} name={name} path={path} key={path} />
             ))}
           </div>
           <AuthButton className="flex w-full justify-start" size="lg" />

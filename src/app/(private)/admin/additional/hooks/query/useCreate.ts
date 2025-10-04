@@ -1,25 +1,18 @@
-import { useApi } from "@/hooks";
 import { useMutation } from "@tanstack/react-query";
-import { AdditionalType } from "../schema";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { parseAsBoolean, useQueryStates } from "nuqs";
 import { queryClient } from "@/providers/react-query";
 import { Additional } from "./useList";
+import { postAdditional } from "@/app/services/additional/postAdditional";
 
 export const useCreate = () => {
-  const { api } = useApi();
-
   const [, setAdditionalStates] = useQueryStates({
     modalCreate: parseAsBoolean.withDefault(false),
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: Omit<AdditionalType, "priceTemplate">) => {
-      const response = await api.post("/additional", data);
-
-      return response.data;
-    },
+    mutationFn: postAdditional,
 
     onError: (error) => {
       console.error(error);

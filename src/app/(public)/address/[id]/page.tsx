@@ -1,9 +1,10 @@
 "use client";
+import { getAddress } from "@/app/services/address/getAddress";
+import { postOrder } from "@/app/services/order/postOrder";
 import { CupStore, useOrderStore } from "@/app/store/order";
 import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 import { Button } from "@/components/ui/button";
 import { PAYMENT_METHOD } from "@/consts";
-import { useApi } from "@/hooks";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -41,8 +42,6 @@ export default function Confirmation() {
 
   const { cups, clean } = useOrderStore();
 
-  const { api } = useApi();
-
   const { isLoading, isError, refetch, data } = useQuery<{
     address_complete: string;
     shipping_price: number;
@@ -51,9 +50,8 @@ export default function Confirmation() {
     queryFn: async () => {
       if (id === "pick-up-local")
         return { address_complete: "Retirada no local", shipping_price: 0 };
-      const response = await api.get(`/address/${id}`);
 
-      return response.data;
+      return await getAddress(id);
     },
   });
 
@@ -71,14 +69,12 @@ export default function Confirmation() {
         address_id: id === "pick-up-local" ? undefined : id,
       };
 
-      const response = await api.post("/order", {
+      return await postOrder({
         ...order,
         hour: meta.hour,
         paymentMethod: meta.paymentMethod,
         change: meta.change ? meta.change : undefined,
       });
-
-      return response.data;
     },
 
     onError: (err: AxiosError) => {

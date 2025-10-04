@@ -1,10 +1,11 @@
+"use client";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { LoginType } from "./schema";
 import { toast } from "sonner";
-import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { api } from "../../services";
+import { setToken } from "@/app/services/auth/setToken";
 
 export const ONE_DAY_IN_SECONDS = 86400;
 
@@ -18,12 +19,14 @@ export const useQuery = () => {
       return response.data.access_token;
     },
 
-    onSuccess: (token: string) => {
+    onSuccess: async (token: string) => {
       if (!token) {
         toast("BASE_URL: " + process.env.BACK_URL);
         return;
       }
-      setCookie("token", token, { maxAge: ONE_DAY_IN_SECONDS * 300 });
+
+      await setToken(token);
+
       push("/");
       toast.success("Logado com sucesso!");
     },

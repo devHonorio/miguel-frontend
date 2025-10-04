@@ -25,11 +25,11 @@ import {
   useQueryStates,
 } from "nuqs";
 import { sleep500ms } from "@/app/utils/sleep500ms";
-import { useApi } from "@/hooks";
 import { Plus, XCircle } from "lucide-react";
 import { PAYMENT_METHOD } from "@/consts";
 import { DatePicker } from "@/components/date-picker";
 import { FormType } from "@/app/(public)/orderDetails/hourAndChange/page";
+import { postOrder } from "@/app/services/orders/postOrder";
 
 export const PaymentMethod = {
   pix: "Pix",
@@ -62,13 +62,8 @@ export const FormCreate = () => {
   const { data: addresses, isLoading: isLoadingAddresses } = useSearchAddresses(
     orderStates.queryAddress,
   );
-  const { api } = useApi();
   const { mutate: createOrder, isPending: isPendingCreateOrder } = useMutation({
-    mutationFn: async (data: CreateOrderType) => {
-      const response = await api.post("/orders", data);
-
-      return response.data as ListOrders;
-    },
+    mutationFn: postOrder,
     onError: (err) => {
       if (err instanceof AxiosError) {
         console.log(err.response?.data);

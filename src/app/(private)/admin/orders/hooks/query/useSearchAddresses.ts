@@ -1,4 +1,4 @@
-import { useApi } from "@/hooks";
+import { getSearchAddresses } from "@/app/services/addresses/getSearchAddresses";
 import { useQuery } from "@tanstack/react-query";
 
 interface Address {
@@ -8,13 +8,10 @@ interface Address {
 }
 
 export const useSearchAddresses = (query: string) => {
-  const { api } = useApi();
-
   const { data, isLoading } = useQuery<Address[]>({
     queryKey: ["addresses", query],
     queryFn: async () => {
-      const response = await api.get(`/address/search/${query}`);
-      return response.data;
+      return getSearchAddresses(query);
     },
   });
 

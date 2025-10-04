@@ -1,4 +1,5 @@
 "use client";
+import { getToken } from "@/app/services/auth/getToken";
 import { useOrderStore } from "@/app/store/order";
 import { toCentsInBRL } from "@/app/utils/toCentInBRL";
 import {
@@ -7,7 +8,6 @@ import {
   CardCupSize,
 } from "@/components/card-cup";
 import { Button } from "@/components/ui/button";
-import { getCookie } from "cookies-next/client";
 import { CupSoda, ShoppingCart, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ export default function OrderDetails() {
   const [token, setToken] = useState(false);
 
   useEffect(() => {
-    const tokenCookie = getCookie("token");
+    const tokenCookie = getToken();
     setToken(!!tokenCookie);
   }, []);
 
