@@ -37,22 +37,22 @@ const schema = z
         {
           message: "Pedidos apenas entre as 14:00 e 18:00",
         },
+      )
+      .refine(
+        (time) => {
+          const [hour, minute] = time.split(":").map(Number);
+          const totalMinutes = hour * 60 + minute;
+
+          const now = new Date();
+
+          const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+          return totalMinutes >= nowMinutes;
+        },
+        {
+          message: "Hora deve ser maior ou igual que a hora atual.",
+        },
       ),
-    // .refine(
-    //   (time) => {
-    //     const [hour, minute] = time.split(":").map(Number);
-    //     const totalMinutes = hour * 60 + minute;
-
-    //     const now = new Date();
-
-    //     const nowMinutes = now.getHours() * 60 + now.getMinutes();
-
-    //     return totalMinutes >= nowMinutes;
-    //   },
-    //   {
-    //     message: "Hora deve ser maior ou igual que a hora atual.",
-    //   },
-    // )
     paymentMethod: z.enum(PAYMENT_METHOD, {
       errorMap: () => ({ message: "Forma de pagamento é obrigatória!" }),
     }),

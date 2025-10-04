@@ -34,6 +34,7 @@ const paths: PathType = {
   "/admin/orders": redirectAdmin,
   "/admin/cups": redirectAdmin,
   "/admin/additional": redirectAdmin,
+  "/admin/addresses": redirectAdmin,
   "/login": async (req, token) => {
     if (token) {
       const isAdmin = await verifyIsAdmin(token);

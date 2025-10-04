@@ -9,6 +9,7 @@ import {
   Cherry,
   ClipboardList,
   CupSoda,
+  Home,
   Menu,
   NotebookTabs,
 } from "lucide-react";
@@ -26,6 +27,7 @@ const paths = [
   { path: "/admin/orders", name: "Pedidos", icon: <NotebookTabs /> },
   { path: "/admin/cups", name: "Copos", icon: <CupSoda /> },
   { path: "/admin/additional", name: "Adicionais", icon: <Cherry /> },
+  { path: "/admin/addresses", name: "Endereços", icon: <Home /> },
   { path: "/catalogo", name: "Catálogo", icon: <ClipboardList /> },
 ];
 
