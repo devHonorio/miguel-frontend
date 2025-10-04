@@ -38,7 +38,10 @@ export const FormUpdate = ({ id }: FormUpdateProps) => {
   if (isLoading) return <Loader2 className="animate-spin" />;
 
   return (
-    <form className="space-y-2" onSubmit={handleSubmit((data) => mutate(data))}>
+    <form
+      className="space-y-2"
+      onSubmit={handleSubmit((data) => mutate({ id, ...data }))}
+    >
       <Input {...register("id")} hidden readOnly />
 
       <Input

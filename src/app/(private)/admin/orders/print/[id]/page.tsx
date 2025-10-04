@@ -1,6 +1,5 @@
 "use client";
 
-import { useApi } from "@/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2, Printer } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -12,6 +11,7 @@ import { useState } from "react";
 import { Courier_Prime } from "next/font/google";
 import { PaymentMethod } from "../../components/form-create";
 import { cleanFormatBRLAndParseCents } from "@/app/utils/cleanFormatBRLAndParseCents";
+import { getOrder } from "@/app/services/orders/getOrder";
 
 const courierPrime = Courier_Prime({
   weight: ["400", "700"],
@@ -21,13 +21,10 @@ const courierPrime = Courier_Prime({
 export default function Print() {
   const { id } = useParams<{ id: string }>();
 
-  const { api } = useApi();
   const { isLoading, data } = useQuery({
     queryKey: ["orders", id],
     queryFn: async () => {
-      const response = await api.get(`/orders/${id}`);
-
-      return response.data as ResponseOrder;
+      return (await getOrder(id)) as ResponseOrder;
     },
   });
 
