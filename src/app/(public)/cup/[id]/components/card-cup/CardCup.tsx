@@ -60,7 +60,7 @@ export const CardCup = ({
 
         return add;
       }
-      return { ...add, price: 2 };
+      return { ...add, price: 200 };
     });
 
   const additionalListUnselected = additionalCurrentWithPrice
@@ -69,7 +69,7 @@ export const CardCup = ({
       if (add.price > 0) return add;
 
       if (countAdditionalFree >= quantity_additional) {
-        return { ...add, price: 2 };
+        return { ...add, price: 200 };
       }
       return add;
     });
